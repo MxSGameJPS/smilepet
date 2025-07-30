@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import styles from "../app/page.module.css";
+import styles from "./hero.module.css";
 
 const banners = [
   { src: "/image/banner1.png", alt: "Banner 1" },

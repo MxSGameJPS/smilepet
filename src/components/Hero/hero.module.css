@@ -1,0 +1,55 @@
+.heroFullBanner {
+  position: relative;
+  width: 100vw;
+  min-height: 220px;
+  max-height: 600px;
+  height: 32vw;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f7f7f7;
+}
+.heroBannerImg {
+  z-index: 1;
+  object-fit: cover;
+}
+.heroIndicators {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 2;
+}
+.heroDot,
+.heroDotActive {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #1e4fa3;
+  cursor: pointer;
+  transition: background 0.2s, border 0.2s;
+}
+.heroDotActive {
+  background: #1e4fa3;
+  border: 2px solid #ffe600;
+}
+@media (max-width: 600px) {
+  .heroFullBanner {
+    min-height: 120px;
+    height: 32vw;
+    max-height: 220px;
+  }
+  .heroIndicators {
+    bottom: 10px;
+    gap: 7px;
+  }
+  .heroDot,
+  .heroDotActive {
+    width: 9px;
+    height: 9px;
+  }
+}
