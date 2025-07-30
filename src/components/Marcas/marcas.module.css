@@ -1,0 +1,40 @@
+.marcasSection {
+  padding: 1.5rem 0 2.5rem 0;
+  background: linear-gradient(
+    135deg,
+    rgb(85, 16, 32) 0%,
+    rgb(221, 169, 113) 40%,
+    rgb(33, 92, 117) 80%,
+    rgb(85, 16, 32) 100%
+  );
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.04);
+}
+
+.marcasTitle {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #fcfcfc;
+  text-align: center;
+  margin-bottom: 2.2rem;
+  letter-spacing: 1px;
+}
+
+.marcasGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.5rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.marcaLogo {
+  height: 54px;
+  width: auto;
+  opacity: 1;
+  transition: filter 0.5s, opacity 0.5s;
+}
+
+.marcaLogo:hover {
+  filter: grayscale(0);
+  opacity: 1;
+}

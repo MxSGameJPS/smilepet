@@ -1,0 +1,140 @@
+.footer {
+  background: #fffbe7;
+  border-top: 1px solid #d1d1e0;
+  padding: 3rem 0 1.5rem 0;
+}
+
+.footerContent {
+  max-width: 1320px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.5rem;
+  justify-content: space-between;
+  align-items: flex-start;
+  row-gap: 3rem;
+}
+
+.footerCol {
+  flex: 1 1 220px;
+  min-width: 220px;
+  color: #232323;
+}
+
+.footerLogo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  margin-bottom: 1.2rem;
+}
+.footerLogo div {
+  color: #444;
+  font-size: 1.05rem;
+  font-weight: 500;
+}
+
+.footerLogo div {
+  color: #000103;
+}
+
+.footerLogo img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+.footerSocial {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.footerSocial a {
+  color: #1a2aff;
+  font-size: 2rem;
+  transition: color 0.2s;
+}
+.footerSocial a:hover {
+  color: #0033cc;
+}
+
+.footerTitle {
+  font-weight: bold;
+  color: #1a2aff;
+  margin-bottom: 1rem;
+  font-size: 1.15rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.footerList a {
+  color: #232323;
+  text-decoration: none;
+  transition: color 0.2s;
+  font-weight: 500;
+}
+.footerList a:hover {
+  color: #1a2aff;
+}
+
+.footerList a {
+  color: #222;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footerList a:hover {
+  color: #0033cc;
+}
+
+.footerNewsletter {
+  margin-bottom: 1.2rem;
+}
+
+.footerNewsletter input {
+  padding: 0.5rem 1rem;
+  border: 1px solid #bdbdbd;
+  border-radius: 6px;
+  margin-right: 0.5rem;
+  font-size: 1rem;
+}
+
+.footerNewsletter button {
+  background: #0033cc;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1.2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.footerNewsletter button:hover {
+  background: #001a66;
+}
+
+.footerPagamentos {
+  display: flex;
+  gap: 0.7rem;
+  margin-bottom: 1.2rem;
+}
+
+.footerPagamentos img {
+  height: 28px;
+  width: auto;
+}
+
+.footerSeguranca img {
+  height: 32px;
+  width: auto;
+}
+
+.footerCopy {
+  text-align: center;
+  color: #030303;
+  font-size: 0.95rem;
+  margin-top: 2rem;
+}
