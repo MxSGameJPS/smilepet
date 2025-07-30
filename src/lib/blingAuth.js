@@ -9,6 +9,7 @@ const AUTH_URL = "https://www.bling.com.br/Api/v3/oauth/authorize";
  * @returns {string} URL para redirecionar o usuário
  */
 export function getBlingAuthUrl() {
+  console.log("DEBUG BLING OAUTH:", { CLIENT_ID, REDIRECT_URI });
   const params = new URLSearchParams({
     response_type: "code",
     client_id: CLIENT_ID,
