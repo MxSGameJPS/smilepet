@@ -1,3 +1,104 @@
+/* Paleta inspirada na logo (ajuste conforme necessário) */
+:root {
+  --smilepet-rosa: #e96e8b;
+  --smilepet-laranja: #ffb86b;
+  --smilepet-azul: #6ec1e4;
+  --smilepet-verde: #7ed957;
+  --smilepet-roxo: #a18fff;
+  --smilepet-gradiente: linear-gradient(
+    135deg,
+    #e96e8b 0%,
+    #ffb86b 40%,
+    #6ec1e4 80%,
+    #a18fff 100%
+  );
+}
+
+.mainHome {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background: var(--smilepet-gradiente);
+  padding: 0;
+}
+
+.headerHome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 48px;
+  margin-bottom: 32px;
+}
+
+.logoHome {
+  border-radius: 50%;
+  box-shadow: 0 4px 24px 0 rgba(233, 110, 139, 0.15);
+  margin-bottom: 16px;
+}
+
+.titleHome {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 2px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.subtitleHome {
+  font-size: 1.3rem;
+  color: #fff;
+  margin-top: 8px;
+  margin-bottom: 0;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cardsSection {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  justify-content: center;
+  margin-top: 32px;
+}
+
+.cardHome {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 24px;
+  box-shadow: 0 4px 24px 0 rgba(110, 193, 228, 0.1);
+  padding: 32px 28px;
+  min-width: 260px;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 2px solid #fff;
+}
+.cardHome:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 8px 32px 0 rgba(233, 110, 139, 0.18);
+  border-color: var(--smilepet-rosa);
+}
+.cardHome h2 {
+  color: var(--smilepet-rosa);
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+.cardHome p {
+  color: #444;
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .cardsSection {
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+}
 .page {
   --gray-rgb: 0, 0, 0;
   --gray-alpha-200: rgba(var(--gray-rgb), 0.08);
@@ -67,10 +168,7 @@
   height: 48px;
   padding: 0 20px;
   border: 1px solid transparent;
-  transition:
-    background 0.2s,
-    color 0.2s,
-    border-color 0.2s;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -107,21 +205,257 @@ a.secondary {
   flex-shrink: 0;
 }
 
-/* Enable hover only on non-touch devices */
-@media (hover: hover) and (pointer: fine) {
-  a.primary:hover {
-    background: var(--button-primary-hover);
-    border-color: transparent;
-  }
+/* ===== NOVO ESTILO PARA HEADER E BANNER ===== */
+.siteBg {
+  min-height: 100vh;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
 
-  a.secondary:hover {
-    background: var(--button-secondary-hover);
-    border-color: transparent;
-  }
+.header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  height: 72px;
+  background: #fff;
+  box-shadow: 0 2px 12px 0 rgba(110, 193, 228, 0.07);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.logoHeader {
+  border-radius: 50%;
+  box-shadow: 0 2px 8px 0 rgba(233, 110, 139, 0.1);
+}
+.brandName {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1e4fa3;
+  letter-spacing: 1px;
+}
+.menu {
+  display: flex;
+  gap: 28px;
+}
+.menu a {
+  color: #1e4fa3;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 1.08rem;
+  transition: color 0.2s;
+  padding: 4px 0;
+  border-bottom: 2px solid transparent;
+}
+.menu a:hover {
+  color: #e96e8b;
+  border-bottom: 2px solid #e96e8b;
+}
 
-  .footer a:hover {
-    text-decoration: underline;
-    text-underline-offset: 4px;
+.bannerHero {
+  width: 100%;
+  background: linear-gradient(90deg, #1e4fa3 60%, #6ec1e4 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 0 32px 0;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.bannerText {
+  color: #fff;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.bannerText h1 {
+  font-size: 2.5rem;
+  font-weight: 900;
+  margin: 0;
+  line-height: 1.1;
+}
+.bannerText p {
+  font-size: 1.2rem;
+  margin: 0;
+}
+.bannerBtn {
+  background: #ffb800;
+  color: #1e4fa3;
+  font-weight: 700;
+  font-size: 1.1rem;
+  padding: 12px 32px;
+  border-radius: 32px;
+  text-decoration: none;
+  box-shadow: 0 2px 8px 0 rgba(233, 110, 139, 0.1);
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+  margin-top: 8px;
+  display: inline-block;
+}
+.bannerBtn:hover {
+  background: #ffe066;
+  color: #e96e8b;
+  transform: translateY(-2px) scale(1.03);
+}
+.bannerImgWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bannerImg {
+  border-radius: 24px;
+  box-shadow: 0 4px 24px 0 rgba(30, 79, 163, 0.1);
+  max-width: 100%;
+  height: auto;
+}
+
+@media (max-width: 900px) {
+  .bannerHero {
+    flex-direction: column;
+    padding: 32px 0 16px 0;
+    gap: 18px;
+  }
+  .header {
+    flex-direction: column;
+    height: auto;
+    padding: 12px 0;
+    gap: 8px;
+  }
+  .menu {
+    gap: 16px;
+  }
+}
+
+/* HEADER V2 - Inspirado na referência */
+.headerV2 {
+  width: 100vw;
+  background: #f7f7f7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 2px 12px 0 rgba(30, 79, 163, 0.04);
+  border-bottom: 3px solid #ffe600;
+  padding-bottom: 0.5rem;
+}
+.headerTop {
+  width: 100%;
+  max-width: 1400px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0.5rem 2vw 0.2rem 2vw;
+  gap: 24px;
+  position: relative;
+}
+.logoCenter {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-width: 120px;
+}
+.logoHeaderV2 {
+  border-radius: 50%;
+  background: #ffe600;
+  border: 3px solid #1e4fa3;
+  box-shadow: 0 2px 8px 0 rgba(30, 79, 163, 0.1);
+}
+.headerSearch {
+  flex: 1 1 0;
+  max-width: 600px;
+  min-width: 220px;
+  padding: 12px 18px;
+  border-radius: 8px;
+  border: 1.5px solid #e0e0e0;
+  font-size: 1.1rem;
+  outline: none;
+  background: #fff;
+  color: #1e4fa3;
+  box-shadow: 0 1px 4px 0 rgba(30, 79, 163, 0.04);
+  margin: 0 auto;
+  display: block;
+}
+.headerIcons {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  font-size: 1.7rem;
+  color: #1e4fa3;
+}
+.cartIconWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.cartBadge {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background: #ffe600;
+  color: #1e4fa3;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border-radius: 50%;
+  padding: 2px 7px;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px 0 rgba(30, 79, 163, 0.1);
+}
+.menuV2 {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  margin: 0.5rem 0 0 0;
+}
+.menuV2 a {
+  color: #1e4fa3;
+  font-weight: 700;
+  font-size: 1.08rem;
+  text-decoration: none;
+  padding: 4px 0;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+.menuV2 a:hover {
+  color: #e96e8b;
+  border-bottom: 2px solid #e96e8b;
+}
+@media (max-width: 900px) {
+  .headerTop {
+    flex-direction: column;
+    gap: 12px;
+    padding: 0.5rem 2vw;
+    align-items: stretch;
+  }
+  .logoCenter,
+  .headerIcons {
+    position: static;
+    transform: none;
+    justify-content: center;
+    margin-bottom: 8px;
+  }
+  .headerSearch {
+    margin: 0 auto 8px auto;
+  }
+  .menuV2 {
+    gap: 16px;
+    font-size: 0.98rem;
   }
 }
 
@@ -163,5 +497,154 @@ a.secondary {
 @media (prefers-color-scheme: dark) {
   .logo {
     filter: invert();
+  }
+}
+
+/* Estilo inspirado em https://www.dogsday.com.br/ */
+.dogsdayBg {
+  min-height: 100vh;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dogsdayHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 48px;
+  margin-bottom: 32px;
+}
+
+.dogsdayLogo {
+  border-radius: 50%;
+  box-shadow: 0 2px 16px 0 rgba(233, 110, 139, 0.1);
+  margin-bottom: 16px;
+}
+
+.dogsdayTitle {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #e96e8b;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.dogsdaySubtitle {
+  font-size: 1.2rem;
+  color: #444;
+  margin-bottom: 18px;
+}
+
+.dogsdayBtn {
+  background: linear-gradient(90deg, #e96e8b 0%, #ffb86b 100%);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.1rem;
+  padding: 12px 32px;
+  border-radius: 32px;
+  text-decoration: none;
+  box-shadow: 0 2px 8px 0 rgba(233, 110, 139, 0.1);
+  transition: background 0.2s, transform 0.2s;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  display: inline-block;
+}
+.dogsdayBtn:hover {
+  background: linear-gradient(90deg, #ffb86b 0%, #e96e8b 100%);
+  transform: translateY(-2px) scale(1.03);
+}
+
+.dogsdayCardsSection {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  justify-content: center;
+  margin-top: 32px;
+  margin-bottom: 48px;
+}
+
+.dogsdayCard {
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 4px 24px 0 rgba(110, 193, 228, 0.1);
+  padding: 32px 28px;
+  min-width: 220px;
+  max-width: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 1.5px solid #f3f3f3;
+  text-align: center;
+}
+.dogsdayCard:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 8px 32px 0 rgba(233, 110, 139, 0.18);
+  border-color: #e96e8b;
+}
+.dogsdayCard h2 {
+  color: #e96e8b;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+.dogsdayCard p {
+  color: #444;
+  font-size: 1.01rem;
+  margin: 0;
+}
+.dogsdayIcon {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+/* HERO CARROSSEL FULL WIDTH */
+.heroFullBanner {
+  position: relative;
+  width: 100vw;
+  min-height: 320px;
+  height: 38vw;
+  max-height: 520px;
+  overflow: hidden;
+  background: var(--smilepet-azul, #6ec1e4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.heroBannerImg {
+  z-index: 1;
+}
+.heroIndicators {
+  position: absolute;
+  left: 50%;
+  bottom: 24px;
+  z-index: 2;
+  display: flex;
+  gap: 10px;
+  transform: translateX(-50%);
+}
+.heroDot,
+.heroDotActive {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  opacity: 0.5;
+  cursor: pointer;
+  border: 2px solid #ffe600;
+  transition: opacity 0.2s, background 0.2s;
+}
+.heroDotActive {
+  opacity: 1;
+  background: #ffe600;
+  border-color: #fff;
+}
+@media (max-width: 900px) {
+  .heroFullBanner {
+    min-height: 180px;
+    height: 48vw;
+    max-height: 260px;
   }
 }
