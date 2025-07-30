@@ -1,0 +1,56 @@
+.planoContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6rem;
+  background: linear-gradient(
+    135deg,
+    rgb(85, 16, 32) 0%,
+    rgb(221, 169, 113) 40%,
+    rgb(33, 92, 117) 80%,
+    rgb(85, 16, 32) 100%
+  );
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+  padding: 2rem 1.5rem;
+}
+
+.planoImg {
+  width: 420px;
+  height: auto;
+  border-radius: 12px;
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.planoInfo {
+  max-width: 520px;
+}
+
+.planoTitle {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #f8f8f8;
+  margin-bottom: 1rem;
+}
+
+.planoText {
+  font-size: 1.1rem;
+  color: #ffffff;
+  margin-bottom: 1.5rem;
+}
+
+.planoBtn {
+  background: #ffb300;
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  padding: 0.8rem 2.2rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.planoBtn:hover {
+  background: #ff9800;
+}
