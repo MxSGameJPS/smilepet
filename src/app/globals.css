@@ -1,3 +1,18 @@
+/* Paleta inspirada na logo (ajuste conforme necessário) */
+:root {
+  --smilepet-rosa: #e96e8b;
+  --smilepet-laranja: #ffb86b;
+  --smilepet-azul: #6ec1e4;
+  --smilepet-verde: #7ed957;
+  --smilepet-roxo: #a18fff;
+  --smilepet-gradiente: linear-gradient(
+    135deg,
+    #e96e8b 0%,
+    #ffb86b 40%,
+    #6ec1e4 80%,
+    #a18fff 100%
+  );
+}
 :root {
   --background: #ffffff;
   --foreground: #171717;
