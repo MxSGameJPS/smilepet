@@ -2,6 +2,7 @@ import Header from "../components/Header/header";
 import Hero from "../components/Hero/hero";
 import FeaturedProducts from "../components/FeaturedProducts/featuredProducts";
 import PlanoAssinatura from "../components/PlanoAssinatura/planoAssinatura";
+import Promocoes from "../components/Promocoes/promocoes";
 
 export default function Home() {
   return (
@@ -10,6 +11,7 @@ export default function Home() {
       <Hero />
       <FeaturedProducts />
       <PlanoAssinatura />
+      <Promocoes />
     </div>
   );
 }
