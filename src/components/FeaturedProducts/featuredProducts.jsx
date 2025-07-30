@@ -33,7 +33,11 @@ export default function FeaturedProducts() {
             const num = Number(preco);
             preco = isNaN(num) ? preco : num.toFixed(2);
           }
-          const img = prod.imagem || prod.imagemThumbnail || "/logo.jpeg";
+          const img =
+            prod.imagemURL ||
+            prod.imagem ||
+            prod.imagemThumbnail ||
+            "/logo.jpeg";
           return (
             <div className={styles.productCard} key={prod.id || i}>
               <img src={img} alt={nome} className={styles.productImg} />

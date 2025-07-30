@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 // Função utilitária para obter o access_token salvo (ajuste conforme seu fluxo real)
 async function getAccessToken() {
   // Em produção (Vercel), use variável de ambiente
-  if (process.env.VERCEL || process.env.NODE_ENV === 'production') {
+  if (process.env.VERCEL || process.env.NODE_ENV === "production") {
     return process.env.BLING_ACCESS_TOKEN || null;
   }
   // Em dev/local, use arquivo
