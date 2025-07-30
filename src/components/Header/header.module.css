@@ -22,6 +22,9 @@
   align-items: center;
   justify-content: flex-start;
 }
+.hamburger {
+  display: none;
+}
 .logoHeaderV2 {
   border-radius: 50%;
   background: #ffe600;
@@ -103,24 +106,142 @@
 @media (max-width: 900px) {
   .headerRow {
     flex-direction: column;
-    gap: 12px;
-    padding: 0.5rem 2vw;
-    align-items: stretch;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0;
+    position: relative;
+    padding: 0.5rem 0.5rem 0.2rem 0.5rem;
   }
   .logoArea {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     justify-content: center;
-    margin-bottom: 8px;
+    position: relative;
+    margin-bottom: 0.2rem;
+  }
+  .hamburger {
+    display: flex !important;
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2.2rem;
+    color: #1e4fa3;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 20;
+    margin: 0;
+    padding: 0;
+    height: 44px;
+    width: 44px;
+    align-items: center;
+    justify-content: center;
+  }
+  .logoHeaderV2 {
+    width: 110px !important;
+    height: 110px !important;
+    margin: 0 auto;
+    display: block;
   }
   .centerArea {
-    min-width: 0;
     width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 0;
   }
   .headerSearch {
-    margin: 0 auto 8px auto;
+    max-width: 98vw;
+    min-width: 0;
+    font-size: 1rem;
+    padding: 10px 10px;
+    margin: 0 auto 6px auto;
   }
   .menuV2 {
+    display: none !important;
+  }
+  .mobileMenu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100vw;
+    background: #fff;
+    box-shadow: 0 2px 12px 0 rgba(30, 79, 163, 0.08);
+    border-bottom: 2px solid #ffe600;
+    padding: 1rem 0 1.5rem 0;
+    gap: 18px;
+    animation: fadeInMenu 0.2s;
+    z-index: 30;
+  }
+  .mobileMenu a {
+    color: #1e4fa3;
+    font-weight: 700;
+    font-size: 1.15rem;
+    text-decoration: none;
+    padding: 8px 0;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+    width: 100vw;
+    text-align: center;
+  }
+  .mobileMenu a:hover {
+    color: #e96e8b;
+    border-bottom: 2px solid #e96e8b;
+  }
+  .headerIcons {
+    width: 100%;
+    justify-content: center;
+    align-items: center;
     gap: 16px;
-    font-size: 0.98rem;
-    max-width: 100%;
+    font-size: 1.3rem;
+    margin-top: 6px;
+  }
+  .cartBadge {
+    font-size: 0.8rem;
+    top: -6px;
+    right: -8px;
+    padding: 1.5px 5px;
+  }
+}
+@media (max-width: 600px) {
+  .logoHeaderV2 {
+    width: 90px !important;
+    height: 90px !important;
+  }
+  .hamburger {
+    font-size: 2.5rem;
+    width: 20px;
+    height: 20px;
+    left: 8px;
+  }
+  .mobileMenu {
+    top: 80px;
+    padding: 0.7rem 0 1.2rem 0;
+    gap: 12px;
+  }
+  .headerSearch {
+    font-size: 0.95rem;
+    padding: 8px 6px;
+  }
+  .headerIcons {
+    font-size: 1.1rem;
+    gap: 10px;
+  }
+}
+@keyframes fadeInMenu {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

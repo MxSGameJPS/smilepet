@@ -1,3 +1,5 @@
+"use client";
+import { useState } from "react";
 import Image from "next/image";
 import {
   FaStore,
@@ -5,14 +7,26 @@ import {
   FaUser,
   FaShoppingCart,
   FaRegCreditCard,
+  FaBars,
+  FaTimes,
 } from "react-icons/fa";
 import styles from "./header.module.css";
 
 export default function Header() {
+  const [menuOpen, setMenuOpen] = useState(false);
   return (
     <header className={styles.headerV2}>
       <div className={styles.headerRow}>
         <div className={styles.logoArea}>
+          {/* Botão hambúrguer só aparece em telas pequenas via CSS */}
+          <button
+            className={styles.hamburger}
+            aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}
+            onClick={() => setMenuOpen((v) => !v)}
+            type="button"
+          >
+            {menuOpen ? <FaTimes /> : <FaBars />}
+          </button>
           <Image
             src="/logo.jpeg"
             alt="Logo SmilePet"
@@ -34,6 +48,26 @@ export default function Header() {
             <a href="#promocoes">Promoções</a>
             <a href="#lojas">Nossas Lojas</a>
           </nav>
+          {/* Menu mobile, aparece só se menuOpen=true */}
+          {menuOpen && (
+            <nav className={styles.mobileMenu}>
+              <a href="#assinaturas" onClick={() => setMenuOpen(false)}>
+                Planos de Assinatura
+              </a>
+              <a href="#caes" onClick={() => setMenuOpen(false)}>
+                Cachorros
+              </a>
+              <a href="#gatos" onClick={() => setMenuOpen(false)}>
+                Gatos
+              </a>
+              <a href="#promocoes" onClick={() => setMenuOpen(false)}>
+                Promoções
+              </a>
+              <a href="#lojas" onClick={() => setMenuOpen(false)}>
+                Nossas Lojas
+              </a>
+            </nav>
+          )}
         </div>
         <div className={styles.headerIcons}>
           <FaStore title="Lojas" />
