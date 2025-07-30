@@ -4,9 +4,10 @@ import Image from "next/image";
 import styles from "../app/page.module.css";
 
 const banners = [
-  { src: "/image/banner1.webp", alt: "Banner 1" },
-  { src: "/image/benner2.webp", alt: "Banner 2" },
-  { src: "/image/banner3.webp", alt: "Banner 3" },
+  { src: "/image/banner1.png", alt: "Banner 1" },
+  { src: "/image/banner2.png", alt: "Banner 2" },
+  { src: "/image/banner3.png", alt: "Banner 3" },
+  { src: "/image/banner4.png", alt: "Banner 4" },
 ];
 
 export default function Hero() {
