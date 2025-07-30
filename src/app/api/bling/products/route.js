@@ -2,7 +2,11 @@ import { NextResponse } from "next/server";
 
 // Função utilitária para obter o access_token salvo (ajuste conforme seu fluxo real)
 async function getAccessToken() {
-  // Busca do arquivo salvo pelo callback
+  // Em produção (Vercel), use variável de ambiente
+  if (process.env.VERCEL || process.env.NODE_ENV === 'production') {
+    return process.env.BLING_ACCESS_TOKEN || null;
+  }
+  // Em dev/local, use arquivo
   try {
     const fs = require("fs");
     const path = "./bling_token.json";
