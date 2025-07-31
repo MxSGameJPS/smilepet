@@ -1,31 +1,18 @@
 // src/lib/vercelKv.js
-// Utilitário para acessar o Vercel KV usando fetch
+// Utilitário para acessar o Upstash Redis usando ioredis
 
-const KV_URL = process.env.KV_REST_API_URL;
-const KV_TOKEN = process.env.KV_REST_API_TOKEN;
+import Redis from "ioredis";
 
-if (!KV_URL || !KV_TOKEN) {
-  console.warn("Vercel KV não configurado corretamente.");
-}
+const redis = new Redis(process.env.REDIS_URL);
 
 export async function kvGet(key) {
-  const res = await fetch(`${KV_URL}/get/${key}`, {
-    headers: { Authorization: `Bearer ${KV_TOKEN}` },
-    cache: "no-store",
-  });
-  if (!res.ok) return null;
-  const data = await res.json();
-  return data.result ?? null;
+  return await redis.get(key);
 }
 
 export async function kvSet(key, value) {
-  const res = await fetch(`${KV_URL}/set/${key}`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${KV_TOKEN}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ value }),
-  });
-  return res.ok;
+  // Salva como string (caso value seja objeto, converta antes de usar)
+  if (typeof value === "object") {
+    value = JSON.stringify(value);
+  }
+  return await redis.set(key, value);
 }
