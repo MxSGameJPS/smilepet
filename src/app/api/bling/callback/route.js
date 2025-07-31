@@ -41,7 +41,9 @@ export async function GET(req) {
         await kvSet("bling_access_token", tokenData.access_token);
         await kvSet("bling_refresh_token", tokenData.refresh_token || null);
         return new Response(
-          `Access Token salvo no Vercel KV!\nAccess Token: ${tokenData.access_token}\nRefresh Token: ${tokenData.refresh_token || "-"}`,
+          `Access Token salvo no Vercel KV!\nAccess Token: ${
+            tokenData.access_token
+          }\nRefresh Token: ${tokenData.refresh_token || "-"}`,
           { status: 200 }
         );
       } else {
@@ -60,7 +62,9 @@ export async function GET(req) {
           )
         );
         return new Response(
-          `Access Token salvo em bling_token.json!\nAccess Token: ${tokenData.access_token}\nRefresh Token: ${tokenData.refresh_token || "-"}`,
+          `Access Token salvo em bling_token.json!\nAccess Token: ${
+            tokenData.access_token
+          }\nRefresh Token: ${tokenData.refresh_token || "-"}`,
           { status: 200 }
         );
       }
