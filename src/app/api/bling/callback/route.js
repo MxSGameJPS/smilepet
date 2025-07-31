@@ -1,3 +1,4 @@
+import { kvSet } from "@/lib/vercelKv";
 // src/app/api/bling/callback/route.js
 
 export async function GET(req) {
@@ -35,28 +36,34 @@ export async function GET(req) {
     );
     const tokenData = await tokenRes.json();
     if (tokenData.access_token) {
-      // Salva o access_token em um arquivo local (bling_token.json)
-      const fs = require("fs");
-      const path = "./bling_token.json";
-      fs.writeFileSync(
-        path,
-        JSON.stringify(
-          {
-            access_token: tokenData.access_token,
-            refresh_token: tokenData.refresh_token || null,
-            created_at: Date.now(),
-          },
-          null,
-          2
-        )
-      );
-
-      return new Response(
-        `Access Token salvo em bling_token.json!\nAccess Token: ${
-          tokenData.access_token
-        }\nRefresh Token: ${tokenData.refresh_token || "-"}`,
-        { status: 200 }
-      );
+      // Em produção, salva no Vercel KV; em dev, salva em arquivo local
+      if (process.env.VERCEL || process.env.NODE_ENV === "production") {
+        await kvSet("bling_access_token", tokenData.access_token);
+        await kvSet("bling_refresh_token", tokenData.refresh_token || null);
+        return new Response(
+          `Access Token salvo no Vercel KV!\nAccess Token: ${tokenData.access_token}\nRefresh Token: ${tokenData.refresh_token || "-"}`,
+          { status: 200 }
+        );
+      } else {
+        const fs = require("fs");
+        const path = "./bling_token.json";
+        fs.writeFileSync(
+          path,
+          JSON.stringify(
+            {
+              access_token: tokenData.access_token,
+              refresh_token: tokenData.refresh_token || null,
+              created_at: Date.now(),
+            },
+            null,
+            2
+          )
+        );
+        return new Response(
+          `Access Token salvo em bling_token.json!\nAccess Token: ${tokenData.access_token}\nRefresh Token: ${tokenData.refresh_token || "-"}`,
+          { status: 200 }
+        );
+      }
     } else {
       return new Response(`Erro ao obter token: ${JSON.stringify(tokenData)}`, {
         status: 400,
