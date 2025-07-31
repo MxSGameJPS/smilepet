@@ -4,10 +4,11 @@ import { NextResponse } from "next/server";
 // Utilitário para ler e salvar o token localmente (apenas em dev)
 const fs = typeof require !== "undefined" ? require("fs") : null;
 const path = "./bling_token.json";
+import { kvGet, kvSet } from "@/lib/vercelKv";
 
 async function getRefreshToken() {
   if (process.env.VERCEL || process.env.NODE_ENV === "production") {
-    return process.env.BLING_REFRESH_TOKEN || null;
+    return await kvGet("bling_refresh_token");
   }
   try {
     if (!fs.existsSync(path)) return null;
@@ -20,9 +21,9 @@ async function getRefreshToken() {
 
 async function saveToken({ access_token, refresh_token }) {
   if (process.env.VERCEL || process.env.NODE_ENV === "production") {
-    // Em produção, apenas loga instrução (não é possível atualizar env em runtime)
-    console.log("Novo access_token:", access_token);
-    console.log("Novo refresh_token:", refresh_token);
+    // Em produção, salva no Vercel KV
+    await kvSet("bling_access_token", access_token);
+    await kvSet("bling_refresh_token", refresh_token);
     return;
   }
   fs.writeFileSync(

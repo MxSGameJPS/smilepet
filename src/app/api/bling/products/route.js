@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
+import { kvGet } from "@/lib/vercelKv";
 
 // Função utilitária para obter o access_token salvo (ajuste conforme seu fluxo real)
 async function getAccessToken() {
-  // Em produção (Vercel), use variável de ambiente
+  // Em produção (Vercel), use o Vercel KV
   if (process.env.VERCEL || process.env.NODE_ENV === "production") {
-    return process.env.BLING_ACCESS_TOKEN || null;
+    return await kvGet("bling_access_token");
   }
   // Em dev/local, use arquivo
   try {
