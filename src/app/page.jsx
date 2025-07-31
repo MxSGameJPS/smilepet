@@ -3,7 +3,6 @@ import Hero from "../components/Hero/hero";
 import FeaturedProducts from "../components/FeaturedProducts/featuredProducts";
 import PlanoAssinatura from "../components/PlanoAssinatura/planoAssinatura";
 import Promocoes from "../components/Promocoes/promocoes";
-import Marcas from "@/components/Marcas/marcas";
 import Footer from "../components/Footer/footer";
 
 export default function Home() {
@@ -14,7 +13,6 @@ export default function Home() {
       <FeaturedProducts />
       <PlanoAssinatura />
       <Promocoes />
-      <Marcas />
       <Footer />
     </div>
   );
