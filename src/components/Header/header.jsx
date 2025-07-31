@@ -11,6 +11,7 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import styles from "./header.module.css";
+import Link from "next/link";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -73,10 +74,14 @@ export default function Header() {
           <FaStore title="Lojas" />
           <FaHeart title="Favoritos" />
           <FaRegCreditCard title="Planos" />
-          <FaUser title="Conta" />
           <div className={styles.cartIconWrap}>
             <FaShoppingCart title="Carrinho" />
             <span className={styles.cartBadge}>0</span>
+          </div>
+          <FaUser title="Conta" />
+          <div className={styles.cartLoginContainer}>
+            <span className={styles.cartLogin}><Link href="/login">Entrar</Link></span>
+            <span className={styles.cartLogin}><Link href="/register">Cadastrar</Link></span>
           </div>
         </div>
       </div>

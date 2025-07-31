@@ -42,6 +42,22 @@
   gap: 10px;
   min-width: 320px;
 }
+
+.cartLogin {
+    color: #1e4fa3;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.cartLoginContainer {
+    display: flex;
+    align-items: start;
+    gap: 12px;
+    color: #1e4fa3;
+    flex-direction: column;
+}
 .headerSearch {
   width: 100%;
   max-width: 650px;
