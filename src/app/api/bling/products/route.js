@@ -19,7 +19,7 @@ async function getAccessToken() {
 }
 
 export async function GET() {
-  const accessToken = await getAccessToken();
+  let accessToken = await getAccessToken();
   if (!accessToken) {
     return NextResponse.json(
       { error: "Token de acesso não encontrado." },
@@ -27,25 +27,48 @@ export async function GET() {
     );
   }
 
-  try {
-    const res = await fetch(
-      "https://www.bling.com.br/Api/v3/produtos?page=1&limit=4",
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          Accept: "application/json",
-        },
-        cache: "no-store",
-      }
-    );
-    if (!res.ok) {
-      const err = await res.text();
-      return NextResponse.json({ error: err }, { status: res.status });
+  let res = await fetch(
+    "https://www.bling.com.br/Api/v3/produtos?page=1&limit=4",
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        Accept: "application/json",
+      },
+      cache: "no-store",
     }
-    const data = await res.json();
-    // Ajuste conforme o formato real da resposta da API do Bling
-    return NextResponse.json(data);
-  } catch (e) {
-    return NextResponse.json({ error: e.message }, { status: 500 });
+  );
+
+  // Se o token for inválido, tenta renovar automaticamente
+  if (res.status === 401) {
+    // Tenta renovar o token
+    const refreshRes = await fetch("/api/bling/refresh", { method: "POST" });
+    if (refreshRes.ok) {
+      const refreshData = await refreshRes.json();
+      accessToken = refreshData.access_token;
+      // Tenta novamente a requisição de produtos
+      res = await fetch(
+        "https://www.bling.com.br/Api/v3/produtos?page=1&limit=4",
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            Accept: "application/json",
+          },
+          cache: "no-store",
+        }
+      );
+    } else {
+      const err = await refreshRes.text();
+      return NextResponse.json(
+        { error: "Falha ao renovar token", details: err },
+        { status: 401 }
+      );
+    }
   }
+
+  if (!res.ok) {
+    const err = await res.text();
+    return NextResponse.json({ error: err }, { status: res.status });
+  }
+  const data = await res.json();
+  return NextResponse.json(data);
 }
