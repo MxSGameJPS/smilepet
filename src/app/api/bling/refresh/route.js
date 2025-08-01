@@ -78,9 +78,18 @@ export async function POST() {
         refresh_token: data.refresh_token,
       });
     } else {
+      // ALERTA: log detalhado do erro de renovação
+      console.error("[Bling Refresh] Falha ao renovar token:", {
+        status: res.status,
+        response: data,
+        sent_refresh_token: refresh_token,
+        client_id,
+      });
       return NextResponse.json({ error: data }, { status: 400 });
     }
   } catch (e) {
+    // ALERTA: log de erro inesperado
+    console.error("[Bling Refresh] Erro inesperado:", e);
     return NextResponse.json({ error: e.message }, { status: 500 });
   }
 }
