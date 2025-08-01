@@ -18,41 +18,32 @@ async function getAccessToken() {
     return null;
   }
 }
-
-export async function GET() {
+export async function GET(request) {
+  const { searchParams } = new URL(request.url);
+  const categoria = searchParams.get("categoria");
+  const idCategoria = searchParams.get("idCategoria");
   let accessToken = await getAccessToken();
+
   if (!accessToken) {
     return NextResponse.json(
-      { error: "Token de acesso não encontrado." },
+      { error: "Token não encontrado" },
       { status: 401 }
     );
   }
 
-  let res = await fetch(
-    "https://www.bling.com.br/Api/v3/produtos?page=1&limit=4",
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        Accept: "application/json",
-      },
-      cache: "no-store",
+  // Se veio idCategoria, busca direto por ele
+  if (idCategoria) {
+    const fs = require("fs");
+    const path = `./produtos_categoria_${idCategoria}.json`;
+    if (fs.existsSync(path)) {
+      const cached = JSON.parse(fs.readFileSync(path, "utf-8"));
+      return NextResponse.json({ data: cached });
     }
-  );
-
-  // Se o token for inválido, tenta renovar automaticamente
-  if (res.status === 401) {
-    // Tenta renovar o token
-    const baseUrl =
-      process.env.NEXT_PUBLIC_BASE_URL || "https://smilepet-loja.vercel.app";
-    const refreshRes = await fetch(`${baseUrl}/api/bling/refresh`, {
-      method: "POST",
-    });
-    if (refreshRes.ok) {
-      const refreshData = await refreshRes.json();
-      accessToken = refreshData.access_token;
-      // Tenta novamente a requisição de produtos
-      res = await fetch(
-        "https://www.bling.com.br/Api/v3/produtos?page=1&limit=4",
+    let page = 1;
+    let produtosTemp = [];
+    while (true) {
+      const res = await fetch(
+        `https://developer.bling.com.br/api/bling/produtos?pagina=${page}&limite=100&criterio=1&tipo=T&idCategoria=${idCategoria}&nome=%20`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -61,19 +52,23 @@ export async function GET() {
           cache: "no-store",
         }
       );
-    } else {
-      const err = await refreshRes.text();
-      return NextResponse.json(
-        { error: "Falha ao renovar token", details: err },
-        { status: 401 }
-      );
+      if (!res.ok) {
+        console.log("Erro na resposta da API Bling:", res.status);
+        break;
+      }
+      const json = await res.json();
+      const arr = Array.isArray(json.data) ? json.data : [];
+      console.log("Produtos extraídos:", arr);
+      if (arr.length === 0) break;
+      produtosTemp = produtosTemp.concat(arr);
+      if (arr.length < 100) break;
+      page++;
     }
+    fs.writeFileSync(path, JSON.stringify(produtosTemp, null, 2));
+    return NextResponse.json({ data: produtosTemp });
   }
+  // ...existing code...
 
-  if (!res.ok) {
-    const err = await res.text();
-    return NextResponse.json({ error: err }, { status: res.status });
-  }
-  const data = await res.json();
-  return NextResponse.json(data);
+  // Se não veio categoria, retorna erro
+  return NextResponse.json({ error: "Categoria obrigatória" }, { status: 400 });
 }

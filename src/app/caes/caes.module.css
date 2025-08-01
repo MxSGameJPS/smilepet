@@ -1,0 +1,54 @@
+/* Estilos para a página de Ração para Cães */
+
+.container {
+  width: 100%;
+  margin: 0 auto;
+  background: #fffbe7;  
+}
+
+.titulo {
+  margin-bottom: 24px;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a7f37;
+  text-align: center;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+}
+
+.card {
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 16px;
+  background: #fff;
+  box-shadow: 0 2px 8px #eee;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.produtoImg {
+  object-fit: contain;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.nome {
+  font-weight: 600;
+  color: #184926;
+}
+
+.preco {
+  font-weight: 600;
+  color: #1a7f37;
+}
+
+.marca {
+  color: #272727;
+  margin-bottom: 8px;
+}

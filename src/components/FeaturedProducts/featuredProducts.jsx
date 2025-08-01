@@ -31,13 +31,9 @@ export default function FeaturedProducts() {
           let preco = prod.preco || prod.precoVenda || prod.valor || "-";
           if (preco !== "-") {
             const num = Number(preco);
-            preco = isNaN(num) ? preco : num.toFixed(2);
+            preco = isNaN(num) ? preco : num.toFixed(2).replace(".", ",");
           }
-          const img =
-            prod.imagemURL ||
-            prod.imagem ||
-            prod.imagemThumbnail ||
-            "/logo.jpeg";
+          const img = prod.imagemURL || "/logo.jpeg";
           return (
             <div className={styles.productCard} key={prod.id || i}>
               <img src={img} alt={nome} className={styles.productImg} />

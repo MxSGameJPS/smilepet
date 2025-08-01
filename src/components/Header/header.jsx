@@ -43,30 +43,30 @@ export default function Header() {
             placeholder="O que seu Pet precisa?"
           />
           <nav className={styles.menuV2}>
-            <a href="#assinaturas">Planos de Assinatura</a>
-            <a href="#caes">Cachorros</a>
-            <a href="#gatos">Gatos</a>
-            <a href="#promocoes">Promoções</a>
-            <a href="#lojas">Nossas Lojas</a>
+            <Link href="#assinaturas">Planos de Assinatura</Link>
+            <Link href="/caes">Cachorros</Link>
+            <Link href="#gatos">Gatos</Link>
+            <Link href="#promocoes">Promoções</Link>
+            <Link href="#lojas">Nossas Lojas</Link>
           </nav>
           {/* Menu mobile, aparece só se menuOpen=true */}
           {menuOpen && (
             <nav className={styles.mobileMenu}>
-              <a href="#assinaturas" onClick={() => setMenuOpen(false)}>
+              <Link href="#assinaturas" onClick={() => setMenuOpen(false)}>
                 Planos de Assinatura
-              </a>
-              <a href="#caes" onClick={() => setMenuOpen(false)}>
+              </Link>
+              <Link href="#caes" onClick={() => setMenuOpen(false)}>
                 Cachorros
-              </a>
-              <a href="#gatos" onClick={() => setMenuOpen(false)}>
+              </Link>
+              <Link href="#gatos" onClick={() => setMenuOpen(false)}>
                 Gatos
-              </a>
-              <a href="#promocoes" onClick={() => setMenuOpen(false)}>
+              </Link>
+              <Link href="#promocoes" onClick={() => setMenuOpen(false)}>
                 Promoções
-              </a>
-              <a href="#lojas" onClick={() => setMenuOpen(false)}>
+              </Link>
+              <Link href="#lojas" onClick={() => setMenuOpen(false)}>
                 Nossas Lojas
-              </a>
+              </Link>
             </nav>
           )}
         </div>
@@ -80,8 +80,12 @@ export default function Header() {
           </div>
           <FaUser title="Conta" />
           <div className={styles.cartLoginContainer}>
-            <span className={styles.cartLogin}><Link href="/login">Entrar</Link></span>
-            <span className={styles.cartLogin}><Link href="/register">Cadastrar</Link></span>
+            <span className={styles.cartLogin}>
+              <Link href="/login">Entrar</Link>
+            </span>
+            <span className={styles.cartLogin}>
+              <Link href="/register">Cadastrar</Link>
+            </span>
           </div>
         </div>
       </div>
