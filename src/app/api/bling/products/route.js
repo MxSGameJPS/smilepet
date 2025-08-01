@@ -42,7 +42,8 @@ export async function GET() {
   // Se o token for inválido, tenta renovar automaticamente
   if (res.status === 401) {
     // Tenta renovar o token
-    const refreshRes = await fetch("/api/bling/refresh", { method: "POST" });
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://smilepet-loja.vercel.app";
+    const refreshRes = await fetch(`${baseUrl}/api/bling/refresh`, { method: "POST" });
     if (refreshRes.ok) {
       const refreshData = await refreshRes.json();
       accessToken = refreshData.access_token;
