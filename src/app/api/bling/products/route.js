@@ -107,6 +107,5 @@ export async function GET(request) {
   fs.writeFileSync(path, JSON.stringify(produtosTemp, null, 2));
   return NextResponse.json({ data: produtosTemp });
 
-  // Se não veio categoria, retorna erro
-  return NextResponse.json({ error: "Categoria obrigatória" }, { status: 400 });
+  // (Removido: erro de categoria obrigatória)
 }
