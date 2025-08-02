@@ -12,7 +12,15 @@ export default function FeaturedProducts() {
       .then((res) => res.json())
       .then((data) => {
         if (data.error) setError(data.error);
-        else setProducts(data.data || data.retorno?.produtos || []);
+        else {
+          // Aceita data como array ou objeto
+          let arr = Array.isArray(data.data) ? data.data : [];
+          // Se vier objeto, tenta pegar produtos
+          if (!arr.length && Array.isArray(data.retorno?.produtos)) {
+            arr = data.retorno.produtos;
+          }
+          setProducts(arr.filter((p) => p && p.id));
+        }
       })
       .catch((err) => setError("Erro ao buscar produtos."))
       .finally(() => setLoading(false));

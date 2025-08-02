@@ -12,10 +12,11 @@ export default function Promocoes() {
     fetch("/api/bling/products?limit=6")
       .then((res) => res.json())
       .then((data) => {
-        // Ajuste conforme o formato real da resposta da API do Bling
-        setProdutos(
-          Array.isArray(data) ? data : data.data || data.retorno || []
-        );
+        let arr = Array.isArray(data.data) ? data.data : [];
+        if (!arr.length && Array.isArray(data.retorno)) {
+          arr = data.retorno;
+        }
+        setProdutos(arr.filter((p) => p && p.id));
         setLoading(false);
       })
       .catch(() => {
