@@ -31,19 +31,85 @@ export async function GET(request) {
     );
   }
 
-  // Se veio idCategoria, busca direto por ele
-  if (idCategoria) {
-    const fs = require("fs");
-    const path = `./produtos_categoria_${idCategoria}.json`;
-    if (fs.existsSync(path)) {
-      const cached = JSON.parse(fs.readFileSync(path, "utf-8"));
+  try {
+    // Se veio idCategoria, busca por categoria
+    if (idCategoria) {
+      let produtosTemp = [];
+      let cacheKey = `bling_produtos_categoria_${idCategoria}`;
+      let cached;
+      if (process.env.VERCEL || process.env.NODE_ENV === "production") {
+        cached = await kvGet(cacheKey);
+      } else {
+        const fs = require("fs");
+        const path = `./produtos_categoria_${idCategoria}.json`;
+        if (fs.existsSync(path)) {
+          cached = JSON.parse(fs.readFileSync(path, "utf-8"));
+        }
+      }
+      if (cached && Array.isArray(cached)) {
+        return NextResponse.json({ data: cached });
+      }
+      let page = 1;
+      while (true) {
+        const res = await fetch(
+          `https://developer.bling.com.br/api/bling/produtos?pagina=${page}&limite=100&criterio=1&tipo=T&idCategoria=${idCategoria}&nome=%20`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              Accept: "application/json",
+            },
+            cache: "no-store",
+          }
+        );
+        if (!res.ok) {
+          const errText = await res.text();
+          console.error(
+            "[Bling Products] Erro na resposta:",
+            res.status,
+            errText
+          );
+          return NextResponse.json(
+            { error: `Erro Bling: ${res.status}`, details: errText },
+            { status: res.status }
+          );
+        }
+        const json = await res.json();
+        const arr = Array.isArray(json.data) ? json.data : [];
+        if (arr.length === 0) break;
+        produtosTemp = produtosTemp.concat(arr);
+        if (arr.length < 100) break;
+        page++;
+      }
+      if (process.env.VERCEL || process.env.NODE_ENV === "production") {
+        await kvSet(cacheKey, produtosTemp);
+      } else {
+        const fs = require("fs");
+        const path = `./produtos_categoria_${idCategoria}.json`;
+        fs.writeFileSync(path, JSON.stringify(produtosTemp, null, 2));
+      }
+      return NextResponse.json({ data: produtosTemp });
+    }
+
+    // Se não veio idCategoria, busca todos os produtos
+    let produtosTemp = [];
+    let cacheKey = `bling_produtos_todos`;
+    let cached;
+    if (process.env.VERCEL || process.env.NODE_ENV === "production") {
+      cached = await kvGet(cacheKey);
+    } else {
+      const fs = require("fs");
+      const path = `./produtos_todos.json`;
+      if (fs.existsSync(path)) {
+        cached = JSON.parse(fs.readFileSync(path, "utf-8"));
+      }
+    }
+    if (cached && Array.isArray(cached)) {
       return NextResponse.json({ data: cached });
     }
     let page = 1;
-    let produtosTemp = [];
     while (true) {
       const res = await fetch(
-        `https://developer.bling.com.br/api/bling/produtos?pagina=${page}&limite=100&criterio=1&tipo=T&idCategoria=${idCategoria}&nome=%20`,
+        `https://developer.bling.com.br/api/bling/produtos?pagina=${page}&limite=100&criterio=1&tipo=T&nome=%20`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -53,59 +119,34 @@ export async function GET(request) {
         }
       );
       if (!res.ok) {
-        console.log("Erro na resposta da API Bling:", res.status);
-        break;
+        const errText = await res.text();
+        console.error(
+          "[Bling Products] Erro na resposta:",
+          res.status,
+          errText
+        );
+        return NextResponse.json(
+          { error: `Erro Bling: ${res.status}`, details: errText },
+          { status: res.status }
+        );
       }
       const json = await res.json();
       const arr = Array.isArray(json.data) ? json.data : [];
-      console.log("Produtos extraídos:", arr);
       if (arr.length === 0) break;
       produtosTemp = produtosTemp.concat(arr);
       if (arr.length < 100) break;
       page++;
     }
-    fs.writeFileSync(path, JSON.stringify(produtosTemp, null, 2));
-    return NextResponse.json({ data: produtosTemp });
-  }
-
-  // Se veio categoria, busca pelo nome (mantém como fallback)
-  if (categoria) {
-    // ...existing code para busca por nome de categoria...
-  }
-
-  // Se não veio categoria nem idCategoria, retorna todos os produtos paginando
-  const fs = require("fs");
-  const path = `./produtos_todos.json`;
-  if (fs.existsSync(path)) {
-    const cached = JSON.parse(fs.readFileSync(path, "utf-8"));
-    return NextResponse.json({ data: cached });
-  }
-  let page = 1;
-  let produtosTemp = [];
-  while (true) {
-    const res = await fetch(
-      `https://developer.bling.com.br/api/bling/produtos?pagina=${page}&limite=100&criterio=1&tipo=T&nome=%20`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          Accept: "application/json",
-        },
-        cache: "no-store",
-      }
-    );
-    if (!res.ok) {
-      console.log("Erro na resposta da API Bling:", res.status);
-      break;
+    if (process.env.VERCEL || process.env.NODE_ENV === "production") {
+      await kvSet(cacheKey, produtosTemp);
+    } else {
+      const fs = require("fs");
+      const path = `./produtos_todos.json`;
+      fs.writeFileSync(path, JSON.stringify(produtosTemp, null, 2));
     }
-    const json = await res.json();
-    const arr = Array.isArray(json.data) ? json.data : [];
-    if (arr.length === 0) break;
-    produtosTemp = produtosTemp.concat(arr);
-    if (arr.length < 100) break;
-    page++;
+    return NextResponse.json({ data: produtosTemp });
+  } catch (e) {
+    console.error("[Bling Products] Erro inesperado:", e);
+    return NextResponse.json({ error: e.message }, { status: 500 });
   }
-  fs.writeFileSync(path, JSON.stringify(produtosTemp, null, 2));
-  return NextResponse.json({ data: produtosTemp });
-
-  // (Removido: erro de categoria obrigatória)
 }

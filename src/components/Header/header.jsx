@@ -55,7 +55,7 @@ export default function Header() {
               <Link href="#assinaturas" onClick={() => setMenuOpen(false)}>
                 Planos de Assinatura
               </Link>
-              <Link href="#caes" onClick={() => setMenuOpen(false)}>
+              <Link href="/caes" onClick={() => setMenuOpen(false)}>
                 Cachorros
               </Link>
               <Link href="#gatos" onClick={() => setMenuOpen(false)}>
