@@ -13,16 +13,16 @@ export default function FeaturedProducts() {
       .then((data) => {
         if (data.error) setError(data.error);
         else {
-          // Aceita data como array ou objeto
-          let arr = Array.isArray(data.data) ? data.data : [];
-          // Se vier objeto, tenta pegar produtos
-          if (!arr.length && Array.isArray(data.retorno?.produtos)) {
+          let arr = [];
+          if (Array.isArray(data.data)) arr = data.data;
+          else if (Array.isArray(data.retorno)) arr = data.retorno;
+          else if (Array.isArray(data.retorno?.produtos))
             arr = data.retorno.produtos;
-          }
+          else if (Array.isArray(data.produtos)) arr = data.produtos;
           setProducts(arr.filter((p) => p && p.id));
         }
       })
-      .catch((err) => setError("Erro ao buscar produtos."))
+      .catch(() => setError("Erro ao buscar produtos."))
       .finally(() => setLoading(false));
   }, []);
 
@@ -31,6 +31,9 @@ export default function FeaturedProducts() {
       <h2 className={styles.title}>Destaques para seu Pet</h2>
       {loading && <p>Carregando produtos...</p>}
       {error && <p className={styles.error}>{error}</p>}
+      {!loading && !error && products.length === 0 && (
+        <p className={styles.error}>Nenhum produto encontrado.</p>
+      )}
       <div className={styles.productsGrid}>
         {products.slice(0, 4).map((prod, i) => {
           // Ajuste conforme estrutura real do retorno da API do Bling

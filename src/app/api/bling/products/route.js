@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { kvGet } from "@/lib/vercelKv";
+import { kvGet, kvSet } from "@/lib/vercelKv";
 
 // Função utilitária para obter o access_token salvo (ajuste conforme seu fluxo real)
 async function getAccessToken() {
@@ -33,91 +33,50 @@ export async function GET(request) {
 
   try {
     // Se veio idCategoria, busca por categoria
-    if (idCategoria) {
-      let produtosTemp = [];
-      let cacheKey = `bling_produtos_categoria_${idCategoria}`;
-      let cached;
-      if (process.env.VERCEL || process.env.NODE_ENV === "production") {
-        cached = await kvGet(cacheKey);
-      } else {
-        const fs = require("fs");
-        const path = `./produtos_categoria_${idCategoria}.json`;
-        if (fs.existsSync(path)) {
-          cached = JSON.parse(fs.readFileSync(path, "utf-8"));
-        }
-      }
-      if (cached && Array.isArray(cached)) {
-        return NextResponse.json({ data: cached });
-      }
-      let page = 1;
-      while (true) {
-        const res = await fetch(
-          `https://developer.bling.com.br/api/bling/produtos?pagina=${page}&limite=100&criterio=1&tipo=T&idCategoria=${idCategoria}&nome=%20`,
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              Accept: "application/json",
-            },
-            cache: "no-store",
-          }
-        );
-        if (!res.ok) {
-          const errText = await res.text();
-          console.error(
-            "[Bling Products] Erro na resposta:",
-            res.status,
-            errText
-          );
-          return NextResponse.json(
-            { error: `Erro Bling: ${res.status}`, details: errText },
-            { status: res.status }
-          );
-        }
-        const json = await res.json();
-        const arr = Array.isArray(json.data) ? json.data : [];
-        if (arr.length === 0) break;
-        produtosTemp = produtosTemp.concat(arr);
-        if (arr.length < 100) break;
-        page++;
-      }
-      if (process.env.VERCEL || process.env.NODE_ENV === "production") {
-        await kvSet(cacheKey, produtosTemp);
-      } else {
-        const fs = require("fs");
-        const path = `./produtos_categoria_${idCategoria}.json`;
-        fs.writeFileSync(path, JSON.stringify(produtosTemp, null, 2));
-      }
-      return NextResponse.json({ data: produtosTemp });
-    }
-
-    // Se não veio idCategoria, busca todos os produtos
     let produtosTemp = [];
-    let cacheKey = `bling_produtos_todos`;
+    let cacheKey = idCategoria
+      ? `bling_produtos_categoria_${idCategoria}`
+      : `bling_produtos_todos`;
     let cached;
     if (process.env.VERCEL || process.env.NODE_ENV === "production") {
       cached = await kvGet(cacheKey);
     } else {
       const fs = require("fs");
-      const path = `./produtos_todos.json`;
+      const path = idCategoria
+        ? `./produtos_categoria_${idCategoria}.json`
+        : `./produtos_todos.json`;
       if (fs.existsSync(path)) {
         cached = JSON.parse(fs.readFileSync(path, "utf-8"));
       }
     }
-    if (cached && Array.isArray(cached)) {
+    if (cached && Array.isArray(cached) && cached.length > 0) {
       return NextResponse.json({ data: cached });
+    } else if (
+      cached &&
+      typeof cached === "object" &&
+      Array.isArray(cached.data) &&
+      cached.data.length > 0
+    ) {
+      return NextResponse.json({ data: cached.data });
     }
+    // Se não tem cache ou está vazio, busca da API Bling
     let page = 1;
+    let erro429 = false;
+    // Função para delay entre páginas
+    function sleep(ms) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
+    }
     while (true) {
-      const res = await fetch(
-        `https://developer.bling.com.br/api/bling/produtos?pagina=${page}&limite=100&criterio=1&tipo=T&nome=%20`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            Accept: "application/json",
-          },
-          cache: "no-store",
-        }
-      );
+      const url = idCategoria
+        ? `https://developer.bling.com.br/api/bling/produtos?pagina=${page}&limite=100&criterio=1&tipo=T&idCategoria=${idCategoria}&nome=%20`
+        : `https://developer.bling.com.br/api/bling/produtos?pagina=${page}&limite=100&criterio=1&tipo=T&nome=%20`;
+      const res = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          Accept: "application/json",
+        },
+        cache: "no-store",
+      });
       if (!res.ok) {
         const errText = await res.text();
         console.error(
@@ -125,24 +84,52 @@ export async function GET(request) {
           res.status,
           errText
         );
+        if (res.status === 429) {
+          erro429 = true;
+          break;
+        }
         return NextResponse.json(
           { error: `Erro Bling: ${res.status}`, details: errText },
           { status: res.status }
         );
       }
+      let arr = [];
       const json = await res.json();
-      const arr = Array.isArray(json.data) ? json.data : [];
+      if (Array.isArray(json.data)) arr = json.data;
+      else if (Array.isArray(json.retorno)) arr = json.retorno;
+      else if (Array.isArray(json.retorno?.produtos))
+        arr = json.retorno.produtos;
+      else if (Array.isArray(json.produtos)) arr = json.produtos;
       if (arr.length === 0) break;
       produtosTemp = produtosTemp.concat(arr);
       if (arr.length < 100) break;
       page++;
+      await sleep(400); // Delay de 400ms entre cada página
     }
-    if (process.env.VERCEL || process.env.NODE_ENV === "production") {
-      await kvSet(cacheKey, produtosTemp);
-    } else {
-      const fs = require("fs");
-      const path = `./produtos_todos.json`;
-      fs.writeFileSync(path, JSON.stringify(produtosTemp, null, 2));
+    if (erro429) {
+      if (cached && Array.isArray(cached) && cached.length > 0) {
+        return NextResponse.json({ data: cached });
+      } else if (
+        cached &&
+        typeof cached === "object" &&
+        Array.isArray(cached.data) &&
+        cached.data.length > 0
+      ) {
+        return NextResponse.json({ data: cached.data });
+      } else {
+        return NextResponse.json({ data: [] });
+      }
+    }
+    if (produtosTemp.length > 0) {
+      if (process.env.VERCEL || process.env.NODE_ENV === "production") {
+        await kvSet(cacheKey, produtosTemp);
+      } else {
+        const fs = require("fs");
+        const path = idCategoria
+          ? `./produtos_categoria_${idCategoria}.json`
+          : `./produtos_todos.json`;
+        fs.writeFileSync(path, JSON.stringify(produtosTemp, null, 2));
+      }
     }
     return NextResponse.json({ data: produtosTemp });
   } catch (e) {
