@@ -1,13 +1,11 @@
 import { NextResponse } from "next/server";
 import { kvGet, kvSet } from "@/lib/vercelKv";
 
-// Função utilitária para obter o access_token salvo (ajuste conforme seu fluxo real)
+// Função utilitária para obter o access_token salvo
 async function getAccessToken() {
-  // Em produção (Vercel), use o Vercel KV
   if (process.env.VERCEL || process.env.NODE_ENV === "production") {
     return await kvGet("bling_access_token");
   }
-  // Em dev/local, use arquivo
   try {
     const fs = require("fs");
     const path = "./bling_token.json";
@@ -18,9 +16,30 @@ async function getAccessToken() {
     return null;
   }
 }
+
+// Função para renovar token
+async function renovarToken() {
+  try {
+    const res = await fetch("/api/bling/refresh", { method: "POST" });
+    const data = await res.json();
+    if (data.access_token) {
+      console.log(
+        "[Bling API] Token renovado:",
+        data.access_token.slice(0, 8) + "..."
+      );
+      return data.access_token;
+    } else {
+      console.error("[Bling API] Falha ao renovar token:", data);
+      return null;
+    }
+  } catch (e) {
+    console.error("[Bling API] Erro ao renovar token:", e);
+    return null;
+  }
+}
+
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
-  const categoria = searchParams.get("categoria");
   const idCategoria = searchParams.get("idCategoria");
   let accessToken = await getAccessToken();
   console.log(
@@ -36,41 +55,15 @@ export async function GET(request) {
     );
   }
 
-  // Função para renovar token
-  async function renovarToken() {
-    try {
-      const res = await fetch("/api/bling/refresh", { method: "POST" });
-      const data = await res.json();
-      if (data.access_token) {
-        console.log(
-          "[Bling API] Token renovado:",
-          data.access_token.slice(0, 8) + "..."
-        );
-        return data.access_token;
-      } else {
-        console.error("[Bling API] Falha ao renovar token:", data);
-        return null;
-      }
-    } catch (e) {
-      console.error("[Bling API] Erro ao renovar token:", e);
-      return null;
-    }
-  }
-
   try {
-    // Se veio idCategoria, busca por categoria
     let produtosTemp = [];
-    let cacheKey = idCategoria
-      ? `bling_produtos_categoria_${idCategoria}`
-      : `bling_produtos_todos`;
+    let cacheKey = `bling_produtos_categoria_${idCategoria}`;
     let cached;
     if (process.env.VERCEL || process.env.NODE_ENV === "production") {
       cached = await kvGet(cacheKey);
     } else {
       const fs = require("fs");
-      const path = idCategoria
-        ? `./produtos_categoria_${idCategoria}.json`
-        : `./produtos_todos.json`;
+      const path = `./produtos_categoria_${idCategoria}.json`;
       if (fs.existsSync(path)) {
         cached = JSON.parse(fs.readFileSync(path, "utf-8"));
       }
@@ -85,17 +78,13 @@ export async function GET(request) {
     ) {
       return NextResponse.json({ data: cached.data });
     }
-    // Se não tem cache ou está vazio, busca da API Bling
     let page = 1;
     let erro429 = false;
-    // Função para delay entre páginas
     function sleep(ms) {
       return new Promise((resolve) => setTimeout(resolve, ms));
     }
     while (true) {
-      const url = idCategoria
-        ? `https://developer.bling.com.br/api/bling/produtos?pagina=${page}&limite=100&criterio=1&tipo=T&idCategoria=${idCategoria}&nome=%20`
-        : `https://developer.bling.com.br/api/bling/produtos?pagina=${page}&limite=100&criterio=1&tipo=T&nome=%20`;
+      const url = `https://developer.bling.com.br/api/bling/produtos?pagina=${page}&limite=100&criterio=1&tipo=T&idCategoria=${idCategoria}&nome=%20`;
       console.log(`[Bling API] Fetching: ${url}`);
       let res = await fetch(url, {
         headers: {
@@ -119,7 +108,6 @@ export async function GET(request) {
           res.status,
           errText
         );
-        // Se token expirou, tenta renovar e refazer a requisição
         if (
           json?.error?.type === "invalid_token" ||
           json?.error?.message === "invalid_token" ||
@@ -129,7 +117,6 @@ export async function GET(request) {
           const novoToken = await renovarToken();
           if (novoToken) {
             accessToken = novoToken;
-            // Tenta novamente a mesma página
             res = await fetch(url, {
               headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -181,7 +168,7 @@ export async function GET(request) {
       produtosTemp = produtosTemp.concat(arr);
       if (arr.length < 100) break;
       page++;
-      await sleep(1000); // Delay de 1000ms entre cada página (evita bloqueio de IP)
+      await sleep(1000); // Delay de 1000ms entre cada página
     }
     if (erro429) {
       console.log(
@@ -208,9 +195,7 @@ export async function GET(request) {
         await kvSet(cacheKey, produtosTemp);
       } else {
         const fs = require("fs");
-        const path = idCategoria
-          ? `./produtos_categoria_${idCategoria}.json`
-          : `./produtos_todos.json`;
+        const path = `./produtos_categoria_${idCategoria}.json`;
         fs.writeFileSync(path, JSON.stringify(produtosTemp, null, 2));
       }
     }
