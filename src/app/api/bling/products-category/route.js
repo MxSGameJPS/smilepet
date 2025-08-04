@@ -39,14 +39,24 @@ async function renovarToken() {
 }
 
 export async function GET(request) {
+  // Rota correta: /api/bling/products-category?idCategoria=ID
   const { searchParams } = new URL(request.url);
   const idCategoria = searchParams.get("idCategoria");
+  if (!idCategoria) {
+    return NextResponse.json(
+      {
+        error:
+          "idCategoria é obrigatório. Exemplo de uso: /api/bling/products-category?idCategoria=10908028",
+      },
+      { status: 400 }
+    );
+  }
   let accessToken = await getAccessToken();
   console.log(
-    "[Bling API] Token usado:",
+    `[Bling API] Token usado:`,
     accessToken ? accessToken.slice(0, 8) + "..." : "NULO"
   );
-  console.log("[Bling API] idCategoria:", idCategoria);
+  console.log(`[Bling API] idCategoria: ${idCategoria}`);
 
   if (!accessToken) {
     return NextResponse.json(
@@ -57,27 +67,6 @@ export async function GET(request) {
 
   try {
     let produtosTemp = [];
-    let cacheKey = `bling_produtos_categoria_${idCategoria}`;
-    let cached;
-    if (process.env.VERCEL || process.env.NODE_ENV === "production") {
-      cached = await kvGet(cacheKey);
-    } else {
-      const fs = require("fs");
-      const path = `./produtos_categoria_${idCategoria}.json`;
-      if (fs.existsSync(path)) {
-        cached = JSON.parse(fs.readFileSync(path, "utf-8"));
-      }
-    }
-    if (cached && Array.isArray(cached) && cached.length > 0) {
-      return NextResponse.json({ data: cached });
-    } else if (
-      cached &&
-      typeof cached === "object" &&
-      Array.isArray(cached.data) &&
-      cached.data.length > 0
-    ) {
-      return NextResponse.json({ data: cached.data });
-    }
     let page = 1;
     let erro429 = false;
     function sleep(ms) {
@@ -85,7 +74,6 @@ export async function GET(request) {
     }
     while (true) {
       const url = `https://developer.bling.com.br/api/bling/produtos?pagina=${page}&limite=100&criterio=1&tipo=T&idCategoria=${idCategoria}&nome=%20`;
-      console.log(`[Bling API] Fetching: ${url}`);
       let res = await fetch(url, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -155,16 +143,12 @@ export async function GET(request) {
         }
       }
       json = json || (await res.json());
-      console.log(`[Bling API] Resposta JSON:`, json);
       if (Array.isArray(json.data)) arr = json.data;
       else if (Array.isArray(json.retorno)) arr = json.retorno;
       else if (Array.isArray(json.retorno?.produtos))
         arr = json.retorno.produtos;
       else if (Array.isArray(json.produtos)) arr = json.produtos;
       if (arr.length === 0) break;
-      console.log(
-        `[Bling API] Página ${page} - Produtos encontrados: ${arr.length}`
-      );
       produtosTemp = produtosTemp.concat(arr);
       if (arr.length < 100) break;
       page++;
@@ -172,39 +156,12 @@ export async function GET(request) {
     }
     if (erro429) {
       console.log(
-        "[Bling API] Erro 429: Limite de requisições atingido. Retornando cache ou array vazio."
+        "[Bling API] Erro 429: Limite de requisições atingido. Retornando array vazio."
       );
-      if (cached && Array.isArray(cached) && cached.length > 0) {
-        return NextResponse.json({ data: cached });
-      } else if (
-        cached &&
-        typeof cached === "object" &&
-        Array.isArray(cached.data) &&
-        cached.data.length > 0
-      ) {
-        return NextResponse.json({ data: cached.data });
-      } else {
-        return NextResponse.json({ data: [] });
-      }
+      return NextResponse.json({ data: [] });
     }
-    if (produtosTemp.length > 0) {
-      console.log(
-        `[Bling API] Total de produtos encontrados: ${produtosTemp.length}`
-      );
-      if (process.env.VERCEL || process.env.NODE_ENV === "production") {
-        await kvSet(cacheKey, produtosTemp);
-      } else {
-        const fs = require("fs");
-        const path = `./produtos_categoria_${idCategoria}.json`;
-        fs.writeFileSync(path, JSON.stringify(produtosTemp, null, 2));
-      }
-    }
+    // Sempre retorna produtosTemp (com imagemURL atualizado)
     return NextResponse.json({ data: produtosTemp });
-    if (produtosTemp.length === 0) {
-      console.log(
-        "[Bling API] Nenhum produto encontrado. Array vazio será retornado."
-      );
-    }
   } catch (e) {
     console.error("[Bling Products] Erro inesperado:", e);
     return NextResponse.json({ error: e.message }, { status: 500 });

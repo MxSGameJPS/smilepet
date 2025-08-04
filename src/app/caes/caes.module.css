@@ -1,9 +1,58 @@
 /* Estilos para a página de Ração para Cães */
+/* Layout flex principal */
+.flexContainer {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 500px;
+}
+
+/* Aside de filtros vertical */
+.filtrosAside {
+  min-width: 180px;
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px #eee;
+  padding: 24px 12px;
+  position: sticky;
+  top: 32px;
+}
+
+/* Botões de filtro */
+.filtroBtn {
+  padding: 12px 8px;
+  background: #eee;
+  color: #333;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  text-align: left;
+  font-size: 1rem;
+  transition: background 0.2s, color 0.2s;
+  outline: none;
+}
+.filtroBtnAtivo {
+  background: #0070f3;
+  color: #fff;
+}
+
+/* Área dos produtos */
+.produtosArea {
+  flex: 1;
+  padding-bottom: 32px;
+}
 
 .container {
   width: 100%;
   margin: 0 auto;
-  background: #fffbe7;  
+  background: #fffbe7;
 }
 
 .titulo {
@@ -21,16 +70,24 @@
 }
 
 .card {
-  border: 1px solid #eee;
-  border-radius: 8px;
-  padding: 16px;
+  border: 1px solid #e6e6c3;
+  border-radius: 12px;
+  padding: 18px 12px;
   background: #fff;
-  box-shadow: 0 2px 8px #eee;
+  box-shadow: 0 2px 12px #f3e9c7;
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-width: 220px;
+  max-width: 320px;
+  width: 100%;
+  transition: box-shadow 0.2s, border 0.2s;
 }
 
+.card:hover {
+  box-shadow: 0 4px 24px #e6e6c3;
+  border: 1.5px solid #1a7f37;
+}
 .produtoImg {
   object-fit: contain;
   margin-bottom: 12px;
@@ -51,4 +108,168 @@
 .marca {
   color: #272727;
   margin-bottom: 8px;
+  text-align: center;
+}
+
+/* Ajustes visuais adicionais */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 32px;
+  padding: 16px 0;
+  justify-items: center;
+}
+
+.filtrosAside {
+  min-width: 180px;
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: #f8f8e2;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px #f3e9c7;
+  padding: 28px 16px;
+  position: sticky;
+  top: 32px;
+  border: 1px solid #f3e9c7;
+}
+
+.filtroBtn {
+  padding: 12px 8px;
+  background: #fffbe7;
+  color: #1a7f37;
+  border: 2px solid #e6e6c3;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  text-align: left;
+  font-size: 1rem;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+  outline: none;
+  box-shadow: 0 1px 4px #f3e9c7;
+}
+.filtroBtnAtivo {
+  background: #1a7f37;
+  color: #fff;
+  border: 2px solid #1a7f37;
+}
+
+.produtosArea {
+  flex: 1;
+  padding-bottom: 32px;
+  background: none;
+}
+
+/* --- ESTILO SIMILAR AO PRINT, COM PALETA SMILEPET --- */
+.filtrosAside {
+  min-width: 220px;
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #fffbe7;
+  border-radius: 18px;
+  box-shadow: 0 2px 16px #f3e9c7;
+  padding: 32px 18px;
+  position: sticky;
+  top: 32px;
+  border: 1.5px solid #e6e6c3;
+  font-family: "Inter", Arial, sans-serif;
+}
+.filtroBtn {
+  padding: 14px 12px;
+  background: #fff;
+  color: #1a7f37;
+  border: 2px solid #e6e6c3;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  text-align: left;
+  font-size: 1.08rem;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+  outline: none;
+  box-shadow: 0 1px 6px #f3e9c7;
+  margin-bottom: 2px;
+}
+.filtroBtnAtivo {
+  background: #1a7f37;
+  color: #fff;
+  border: 2px solid #1a7f37;
+}
+.filtroBtn:hover {
+  background: #e6e6c3;
+  color: #184926;
+  border: 2px solid #1a7f37;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 36px;
+  padding: 24px 0 8px 0;
+  justify-items: center;
+}
+.card {
+  border: 1.5px solid #e6e6c3;
+  border-radius: 18px;
+  padding: 22px 16px 18px 16px;
+  background: #fff;
+  box-shadow: 0 2px 18px #f3e9c7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 220px;
+  max-width: 320px;
+  width: 100%;
+  transition: box-shadow 0.2s, border 0.2s;
+  font-family: "Inter", Arial, sans-serif;
+}
+.card:hover {
+  box-shadow: 0 6px 32px #e6e6c3;
+  border: 2px solid #1a7f37;
+}
+.produtoImg {
+  object-fit: cover;
+  margin-bottom: 16px;
+  border-radius: 12px;
+  background: #fafafa;
+  width: 200px;
+  height: 200px;
+}
+
+.verMaisBtn {
+  background: #1a7f37;
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  padding: 0.8rem 2.2rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.nome {
+  font-weight: 600;
+  color: #184926;
+  text-align: center;
+  margin-bottom: 6px;
+  font-size: 1.08rem;
+  line-height: 1.2;
+  min-height: 40px;
+  max-height: 44px;
+  overflow: hidden;
+}
+.preco {
+  font-weight: 600;
+  color: #1a7f37;
+  text-align: center;
+  margin-top: 8px;
+  font-size: 1.1rem;
+}
+.marca {
+  color: #272727;
+  margin-bottom: 8px;
+  text-align: center;
+  font-size: 0.98rem;
 }
