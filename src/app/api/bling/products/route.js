@@ -125,11 +125,7 @@ export async function GET(request) {
         json = {};
       }
       console.log(`[Bling API] Status: ${res.status} | Body:`, errText);
-      console.error(
-        "[Bling Products] Erro na resposta:",
-        res.status,
-        errText
-      );
+      console.error("[Bling Products] Erro na resposta:", res.status, errText);
       // Se token expirou, tenta renovar e refazer a requisição
       if (
         json?.error?.type === "invalid_token" ||
@@ -197,7 +193,9 @@ export async function GET(request) {
     else if (Array.isArray(json.retorno?.produtos)) arr = json.retorno.produtos;
     else if (Array.isArray(json.produtos)) arr = json.produtos;
     produtosTemp = arr;
-    console.log(`[Bling API] Produtos buscados para home: ${produtosTemp.length}`);
+    console.log(
+      `[Bling API] Produtos buscados para home: ${produtosTemp.length}`
+    );
     if (erro429) {
       console.log(
         "[Bling API] Erro 429: Limite de requisições atingido. Retornando cache ou array vazio."
