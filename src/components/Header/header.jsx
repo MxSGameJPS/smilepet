@@ -43,11 +43,11 @@ export default function Header() {
             placeholder="O que seu Pet precisa?"
           />
           <nav className={styles.menuV2}>
-            <Link href="#assinaturas">Planos de Assinatura</Link>
+            <Link href="/assinaturas">Planos de Assinatura</Link>
             <Link href="/caes">Cachorros</Link>
-            <Link href="#gatos">Gatos</Link>
-            <Link href="#promocoes">Promoções</Link>
-            <Link href="#lojas">Nossas Lojas</Link>
+            <Link href="/gatos">Gatos</Link>
+            <Link href="/promocoes">Promoções</Link>
+            <Link href="/lojas">Nossas Lojas</Link>
           </nav>
           {/* Menu mobile, aparece só se menuOpen=true */}
           {menuOpen && (
@@ -58,13 +58,13 @@ export default function Header() {
               <Link href="/caes" onClick={() => setMenuOpen(false)}>
                 Cachorros
               </Link>
-              <Link href="#gatos" onClick={() => setMenuOpen(false)}>
+              <Link href="/gatos" onClick={() => setMenuOpen(false)}>
                 Gatos
               </Link>
-              <Link href="#promocoes" onClick={() => setMenuOpen(false)}>
+              <Link href="/promocoes" onClick={() => setMenuOpen(false)}>
                 Promoções
               </Link>
-              <Link href="#lojas" onClick={() => setMenuOpen(false)}>
+              <Link href="/lojas" onClick={() => setMenuOpen(false)}>
                 Nossas Lojas
               </Link>
             </nav>

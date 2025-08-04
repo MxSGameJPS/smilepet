@@ -19,36 +19,38 @@ export default function Home() {
         const cache = localStorage.getItem("produtosCache");
         const cacheTime = localStorage.getItem("produtosCacheTime");
         const now = Date.now();
+        let produtosPai = [];
         if (cache && cacheTime && !force && now - Number(cacheTime) < 3600000) {
-          setProdutos(JSON.parse(cache));
-          setLoading(false);
-          return;
+          console.log("[HOME] Usando cache localStorage");
+          produtosPai = JSON.parse(cache);
+        } else {
+          console.log("[HOME] Buscando produtos da API /api/bling/products");
+          const res = await fetch("/api/bling/products");
+          const data = await res.json();
+          const produtos = Array.isArray(data?.data) ? data.data : [];
+          produtosPai = produtos.filter((prod) => !prod.idProdutoPai);
+          localStorage.setItem("produtosCache", JSON.stringify(produtosPai));
+          localStorage.setItem("produtosCacheTime", String(now));
         }
-        const res = await fetch("/api/bling/products");
-        const data = await res.json();
-        const produtos = Array.isArray(data?.data) ? data.data : [];
-        // Filtra apenas produtos pai (sem idProdutoPai)
-        const produtosPai = produtos.filter((prod) => !prod.idProdutoPai);
-        const produtosComImagem = await Promise.all(
-          produtosPai.map(async (prod) => {
-            try {
-              const res = await fetch(`/api/bling/products/${prod.id}`);
-              const data = await res.json();
-              const imgOriginal =
-                data?.imagemOriginal ||
-                data?.data?.midia?.imagens?.internas?.[0]?.link;
-              return { ...prod, imagemURL: imgOriginal || prod.imagemURL };
-            } catch {
-              return prod;
-            }
-          })
-        );
-        setProdutos(produtosComImagem);
-        localStorage.setItem(
-          "produtosCache",
-          JSON.stringify(produtosComImagem)
-        );
-        localStorage.setItem("produtosCacheTime", String(now));
+        setProdutos(produtosPai);
+        // Após atualizar o estado, carrega as imagens detalhadas dos produtos
+        if (produtosPai.length > 0) {
+          const produtosComImagem = await Promise.all(
+            produtosPai.map(async (prod) => {
+              try {
+                const res = await fetch(`/api/bling/products/${prod.id}`);
+                const data = await res.json();
+                const imgOriginal =
+                  data?.imagemOriginal ||
+                  data?.data?.midia?.imagens?.internas?.[0]?.link;
+                return { ...prod, imagemURL: imgOriginal || prod.imagemURL };
+              } catch {
+                return prod;
+              }
+            })
+          );
+          setProdutos(produtosComImagem);
+        }
       } catch (e) {
         setProdutos([]);
       } finally {
