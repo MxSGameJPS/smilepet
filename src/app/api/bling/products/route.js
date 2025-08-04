@@ -23,12 +23,38 @@ export async function GET(request) {
   const categoria = searchParams.get("categoria");
   const idCategoria = searchParams.get("idCategoria");
   let accessToken = await getAccessToken();
+  console.log(
+    "[Bling API] Token usado:",
+    accessToken ? accessToken.slice(0, 8) + "..." : "NULO"
+  );
+  console.log("[Bling API] idCategoria:", idCategoria);
 
   if (!accessToken) {
     return NextResponse.json(
       { error: "Token não encontrado" },
       { status: 401 }
     );
+  }
+
+  // Função para renovar token
+  async function renovarToken() {
+    try {
+      const res = await fetch("/api/bling/refresh", { method: "POST" });
+      const data = await res.json();
+      if (data.access_token) {
+        console.log(
+          "[Bling API] Token renovado:",
+          data.access_token.slice(0, 8) + "..."
+        );
+        return data.access_token;
+      } else {
+        console.error("[Bling API] Falha ao renovar token:", data);
+        return null;
+      }
+    } catch (e) {
+      console.error("[Bling API] Erro ao renovar token:", e);
+      return null;
+    }
   }
 
   try {
@@ -70,43 +96,97 @@ export async function GET(request) {
       const url = idCategoria
         ? `https://developer.bling.com.br/api/bling/produtos?pagina=${page}&limite=100&criterio=1&tipo=T&idCategoria=${idCategoria}&nome=%20`
         : `https://developer.bling.com.br/api/bling/produtos?pagina=${page}&limite=100&criterio=1&tipo=T&nome=%20`;
-      const res = await fetch(url, {
+      console.log(`[Bling API] Fetching: ${url}`);
+      let res = await fetch(url, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           Accept: "application/json",
         },
         cache: "no-store",
       });
+      let arr = [];
+      let json;
       if (!res.ok) {
         const errText = await res.text();
+        try {
+          json = JSON.parse(errText);
+        } catch {
+          json = {};
+        }
+        console.log(`[Bling API] Status: ${res.status} | Body:`, errText);
         console.error(
           "[Bling Products] Erro na resposta:",
           res.status,
           errText
         );
-        if (res.status === 429) {
+        // Se token expirou, tenta renovar e refazer a requisição
+        if (
+          json?.error?.type === "invalid_token" ||
+          json?.error?.message === "invalid_token" ||
+          errText.includes("invalid_token")
+        ) {
+          console.warn("[Bling API] Token expirado detectado. Renovando...");
+          const novoToken = await renovarToken();
+          if (novoToken) {
+            accessToken = novoToken;
+            // Tenta novamente a mesma página
+            res = await fetch(url, {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+                Accept: "application/json",
+              },
+              cache: "no-store",
+            });
+            if (!res.ok) {
+              const errText2 = await res.text();
+              console.log(
+                `[Bling API] Status após renovação: ${res.status} | Body:`,
+                errText2
+              );
+              return NextResponse.json(
+                {
+                  error: `Erro Bling após renovação: ${res.status}`,
+                  details: errText2,
+                },
+                { status: res.status }
+              );
+            }
+          } else {
+            return NextResponse.json(
+              { error: "Falha ao renovar token Bling." },
+              { status: 401 }
+            );
+          }
+        } else if (res.status === 429) {
           erro429 = true;
           break;
+        } else {
+          return NextResponse.json(
+            { error: `Erro Bling: ${res.status}`, details: errText },
+            { status: res.status }
+          );
         }
-        return NextResponse.json(
-          { error: `Erro Bling: ${res.status}`, details: errText },
-          { status: res.status }
-        );
       }
-      let arr = [];
-      const json = await res.json();
+      json = json || (await res.json());
+      console.log(`[Bling API] Resposta JSON:`, json);
       if (Array.isArray(json.data)) arr = json.data;
       else if (Array.isArray(json.retorno)) arr = json.retorno;
       else if (Array.isArray(json.retorno?.produtos))
         arr = json.retorno.produtos;
       else if (Array.isArray(json.produtos)) arr = json.produtos;
       if (arr.length === 0) break;
+      console.log(
+        `[Bling API] Página ${page} - Produtos encontrados: ${arr.length}`
+      );
       produtosTemp = produtosTemp.concat(arr);
       if (arr.length < 100) break;
       page++;
-      await sleep(400); // Delay de 400ms entre cada página
+      await sleep(1000); // Delay de 1000ms entre cada página (evita bloqueio de IP)
     }
     if (erro429) {
+      console.log(
+        "[Bling API] Erro 429: Limite de requisições atingido. Retornando cache ou array vazio."
+      );
       if (cached && Array.isArray(cached) && cached.length > 0) {
         return NextResponse.json({ data: cached });
       } else if (
@@ -121,6 +201,9 @@ export async function GET(request) {
       }
     }
     if (produtosTemp.length > 0) {
+      console.log(
+        `[Bling API] Total de produtos encontrados: ${produtosTemp.length}`
+      );
       if (process.env.VERCEL || process.env.NODE_ENV === "production") {
         await kvSet(cacheKey, produtosTemp);
       } else {
@@ -132,6 +215,11 @@ export async function GET(request) {
       }
     }
     return NextResponse.json({ data: produtosTemp });
+    if (produtosTemp.length === 0) {
+      console.log(
+        "[Bling API] Nenhum produto encontrado. Array vazio será retornado."
+      );
+    }
   } catch (e) {
     console.error("[Bling Products] Erro inesperado:", e);
     return NextResponse.json({ error: e.message }, { status: 500 });
