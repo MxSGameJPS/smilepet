@@ -27,7 +27,7 @@ export async function GET(request) {
     "[Bling API] Token usado:",
     accessToken ? accessToken.slice(0, 8) + "..." : "NULO"
   );
-  console.log("[Bling API] idCategoria:", idCategoria);
+  // console.log("[Bling API] idCategoria:", idCategoria);
 
   if (!accessToken) {
     return NextResponse.json(
@@ -96,7 +96,7 @@ export async function GET(request) {
       const url = idCategoria
         ? `https://developer.bling.com.br/api/bling/produtos?pagina=${page}&limite=100&criterio=1&tipo=T&idCategoria=${idCategoria}&nome=%20`
         : `https://developer.bling.com.br/api/bling/produtos?pagina=${page}&limite=100&criterio=1&tipo=T&nome=%20`;
-      console.log(`[Bling API] Fetching: ${url}`);
+      // console.log(`[Bling API] Fetching: ${url}`);
       let res = await fetch(url, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -168,7 +168,7 @@ export async function GET(request) {
         }
       }
       json = json || (await res.json());
-      console.log(`[Bling API] Resposta JSON:`, json);
+      // console.log(`[Bling API] Resposta JSON:`, json);
       if (Array.isArray(json.data)) arr = json.data;
       else if (Array.isArray(json.retorno)) arr = json.retorno;
       else if (Array.isArray(json.retorno?.produtos))
@@ -201,9 +201,9 @@ export async function GET(request) {
       }
     }
     if (produtosTemp.length > 0) {
-      console.log(
-        `[Bling API] Total de produtos encontrados: ${produtosTemp.length}`
-      );
+      // console.log(
+      //   `[Bling API] Total de produtos encontrados: ${produtosTemp.length}`
+      // );
       if (process.env.VERCEL || process.env.NODE_ENV === "production") {
         await kvSet(cacheKey, produtosTemp);
       } else {
