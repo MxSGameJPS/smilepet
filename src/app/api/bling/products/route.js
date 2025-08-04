@@ -24,12 +24,22 @@ export async function GET(request) {
   const idCategoria = searchParams.get("idCategoria");
   let accessToken = await getAccessToken();
   console.log(
-    "[Bling API] Token usado:",
+    `[Bling API] Ambiente: ${process.env.NODE_ENV} | VERCEL: ${process.env.VERCEL}`
+  );
+  console.log(
+    `[Bling API] Token usado:`,
     accessToken ? accessToken.slice(0, 8) + "..." : "NULO"
+  );
+  console.log(`[Bling API] REDIS_URL: ${process.env.REDIS_URL}`);
+  console.log(
+    `[Bling API] BLING_REDIRECT_URI: ${process.env.BLING_REDIRECT_URI}`
   );
   // console.log("[Bling API] idCategoria:", idCategoria);
 
   if (!accessToken) {
+    console.error(
+      "[Bling API] Token não encontrado! Verifique persistência do token em produção."
+    );
     return NextResponse.json(
       { error: "Token não encontrado" },
       { status: 401 }
@@ -90,6 +100,8 @@ export async function GET(request) {
         `[Bling API] Retornando produtos do cache (${cacheKey}) - total: ${cached.data.length}`
       );
       return NextResponse.json({ data: cached.data });
+    } else {
+      console.warn(`[Bling API] Cache vazio ou inexistente para ${cacheKey}`);
     }
     // Se não tem cache ou está vazio, busca da API Bling
     let page = 1;
@@ -207,9 +219,9 @@ export async function GET(request) {
       }
     }
     if (produtosTemp.length > 0) {
-      // console.log(
-      //   `[Bling API] Total de produtos encontrados: ${produtosTemp.length}`
-      // );
+      console.log(
+        `[Bling API] Total de produtos encontrados: ${produtosTemp.length}`
+      );
       if (process.env.VERCEL || process.env.NODE_ENV === "production") {
         await kvSet(cacheKey, produtosTemp);
       } else {
@@ -219,13 +231,12 @@ export async function GET(request) {
           : `./produtos_todos.json`;
         fs.writeFileSync(path, JSON.stringify(produtosTemp, null, 2));
       }
-    }
-    return NextResponse.json({ data: produtosTemp });
-    if (produtosTemp.length === 0) {
-      console.log(
-        "[Bling API] Nenhum produto encontrado. Array vazio será retornado."
+    } else {
+      console.warn(
+        `[Bling API] Nenhum produto encontrado na API. Array vazio será retornado.`
       );
     }
+    return NextResponse.json({ data: produtosTemp });
   } catch (e) {
     console.error("[Bling Products] Erro inesperado:", e);
     return NextResponse.json({ error: e.message }, { status: 500 });
