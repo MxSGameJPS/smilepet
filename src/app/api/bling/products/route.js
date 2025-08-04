@@ -223,7 +223,12 @@ export async function GET(request) {
         `[Bling API] Produtos retornados da API Bling! Total: ${produtosTemp.length}`
       );
       if (process.env.VERCEL || process.env.NODE_ENV === "production") {
-        await kvSet(cacheKey, produtosTemp);
+        try {
+          await kvSet(cacheKey, produtosTemp);
+          console.log(`[Bling API] Cache salvo com sucesso (${cacheKey})`);
+        } catch (err) {
+          console.error(`[Bling API] Erro ao salvar cache (${cacheKey}):`, err);
+        }
       } else {
         const fs = require("fs");
         const path = idCategoria
