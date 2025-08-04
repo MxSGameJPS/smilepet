@@ -196,23 +196,6 @@ export async function GET(request) {
     console.log(
       `[Bling API] Produtos buscados para home: ${produtosTemp.length}`
     );
-    if (erro429) {
-      console.log(
-        "[Bling API] Erro 429: Limite de requisições atingido. Retornando cache ou array vazio."
-      );
-      if (cached && Array.isArray(cached) && cached.length > 0) {
-        return NextResponse.json({ data: cached });
-      } else if (
-        cached &&
-        typeof cached === "object" &&
-        Array.isArray(cached.data) &&
-        cached.data.length > 0
-      ) {
-        return NextResponse.json({ data: cached.data });
-      } else {
-        return NextResponse.json({ data: [] });
-      }
-    }
     if (produtosTemp.length > 0) {
       console.log(
         `[Bling API] Produtos retornados da API Bling! Total: ${produtosTemp.length}`
