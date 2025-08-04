@@ -220,7 +220,7 @@ export async function GET(request) {
     }
     if (produtosTemp.length > 0) {
       console.log(
-        `[Bling API] Total de produtos encontrados: ${produtosTemp.length}`
+        `[Bling API] Produtos retornados da API Bling! Total: ${produtosTemp.length}`
       );
       if (process.env.VERCEL || process.env.NODE_ENV === "production") {
         await kvSet(cacheKey, produtosTemp);
