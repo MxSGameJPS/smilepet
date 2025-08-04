@@ -20,15 +20,33 @@ export default function Home() {
         const cacheTime = localStorage.getItem("produtosCacheTime");
         const now = Date.now();
         let produtosPai = [];
-        if (cache && cacheTime && !force && now - Number(cacheTime) < 3600000) {
+        let cacheArray = [];
+        if (cache) {
+          try {
+            cacheArray = JSON.parse(cache);
+          } catch {
+            cacheArray = [];
+          }
+        }
+        if (
+          cache &&
+          cacheTime &&
+          !force &&
+          now - Number(cacheTime) < 3600000 &&
+          Array.isArray(cacheArray) &&
+          cacheArray.length > 0
+        ) {
           console.log("[HOME] Usando cache localStorage");
-          produtosPai = JSON.parse(cache);
+          produtosPai = cacheArray;
         } else {
           console.log("[HOME] Buscando produtos da API /api/bling/products");
           const res = await fetch("/api/bling/products");
           const data = await res.json();
           const produtos = Array.isArray(data?.data) ? data.data : [];
           produtosPai = produtos.filter((prod) => !prod.idProdutoPai);
+          console.log(
+            `[HOME] Quantidade de produtos encontrados na API: ${produtosPai.length}`
+          );
           localStorage.setItem("produtosCache", JSON.stringify(produtosPai));
           localStorage.setItem("produtosCacheTime", String(now));
         }

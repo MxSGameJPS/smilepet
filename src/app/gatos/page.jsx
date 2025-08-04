@@ -45,8 +45,23 @@ export default function GatosPage() {
       const cacheTime = localStorage.getItem(cacheTimeKey);
       const now = Date.now();
       let produtosUnicos;
-      if (cache && cacheTime && !force && now - Number(cacheTime) < 3600000) {
-        produtosUnicos = JSON.parse(cache);
+      let cacheArray = [];
+      if (cache) {
+        try {
+          cacheArray = JSON.parse(cache);
+        } catch {
+          cacheArray = [];
+        }
+      }
+      if (
+        cache &&
+        cacheTime &&
+        !force &&
+        now - Number(cacheTime) < 3600000 &&
+        Array.isArray(cacheArray) &&
+        cacheArray.length > 0
+      ) {
+        produtosUnicos = cacheArray;
       } else {
         const resultados = await Promise.all(
           ids.map(async (id) => {
@@ -59,6 +74,9 @@ export default function GatosPage() {
         );
         const todosProdutos = resultados.flat();
         const produtosPai = todosProdutos.filter((prod) => !prod.idProdutoPai);
+        console.log(
+          `[GATOS] Quantidade de produtos encontrados na API: ${produtosPai.length}`
+        );
         produtosUnicos = Object.values(
           produtosPai.reduce((acc, prod) => {
             acc[prod.id] = prod;

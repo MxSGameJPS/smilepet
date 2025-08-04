@@ -100,11 +100,18 @@ export async function GET(request) {
       }
     }
     json = json || (await res.json());
+    console.log(
+      "[Bling Products] Corpo da resposta Bling:",
+      JSON.stringify(json)
+    );
     if (Array.isArray(json.data)) arr = json.data;
     else if (Array.isArray(json.retorno)) arr = json.retorno;
     else if (Array.isArray(json.retorno?.produtos)) arr = json.retorno.produtos;
     else if (Array.isArray(json.produtos)) arr = json.produtos;
     produtosTemp = arr;
+    console.log(
+      `[Bling Products] Quantidade de produtos retornados: ${produtosTemp.length}`
+    );
     return NextResponse.json({ data: produtosTemp });
   } catch (e) {
     console.error("[Bling Products] Erro inesperado:", e);
