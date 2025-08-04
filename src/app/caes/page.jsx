@@ -105,17 +105,41 @@ export default function CaesPage() {
     return [...produtosComImagem, ...produtosBase.slice(fim)];
   }
   useEffect(() => {
-    fetchProdutosPorFiltro(filtro);
-    const interval = setInterval(
-      () => fetchProdutosPorFiltro(filtro, true),
-      3600000
-    );
+    (async () => {
+      setLoading(true);
+      await fetchProdutosPorFiltro(filtro);
+      // Busca os dados básicos do cache/localStorage
+      const cacheKey = `caesCache_${filtro}`;
+      const cache = localStorage.getItem(cacheKey);
+      let produtosBase = produtos;
+      if (cache) {
+        produtosBase = JSON.parse(cache);
+      }
+      // Após atualizar o estado, carrega as imagens dos produtos visíveis
+      const produtosComImagem = await carregarImagensPorPagina(produtosBase, 1);
+      setProdutos(produtosComImagem);
+      setLoading(false);
+    })();
+    const interval = setInterval(async () => {
+      setLoading(true);
+      await fetchProdutosPorFiltro(filtro, true);
+      const cacheKey = `caesCache_${filtro}`;
+      const cache = localStorage.getItem(cacheKey);
+      let produtosBase = produtos;
+      if (cache) {
+        produtosBase = JSON.parse(cache);
+      }
+      const produtosComImagem = await carregarImagensPorPagina(produtosBase, 1);
+      setProdutos(produtosComImagem);
+      setLoading(false);
+    }, 3600000);
     return () => clearInterval(interval);
   }, [filtro]);
 
   return (
     <>
       <Header />
+
       <section
         style={{
           width: "100%",
@@ -132,6 +156,19 @@ export default function CaesPage() {
       </section>
       <div className={`${styles.container} ${styles.flexContainer}`}>
         <aside className={styles.filtrosAside}>
+          <div style={{ width: "100%", textAlign: "center", margin: " 0 0 " }}>
+            <a
+              href="/"
+              style={{
+                color: "#0099ff",
+                textDecoration: "underline",
+                fontWeight: "bold",
+                fontSize: "1rem",
+              }}
+            >
+              ← Home
+            </a>
+          </div>
           <button
             className={`${styles.filtroBtn} ${
               filtro === "racoes" ? styles.filtroBtnAtivo : ""
