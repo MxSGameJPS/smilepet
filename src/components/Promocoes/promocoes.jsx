@@ -1,32 +1,8 @@
 "use client";
 import styles from "./promocoes.module.css";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 
-export default function Promocoes() {
-  const [produtos, setProdutos] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    fetch("/api/bling/products?limit=6")
-      .then((res) => res.json())
-      .then((data) => {
-        let arr = [];
-        if (Array.isArray(data.data)) arr = data.data;
-        else if (Array.isArray(data.retorno)) arr = data.retorno;
-        else if (Array.isArray(data.retorno?.produtos))
-          arr = data.retorno.produtos;
-        else if (Array.isArray(data.produtos)) arr = data.produtos;
-        setProdutos(arr.filter((p) => p && p.id));
-        setLoading(false);
-      })
-      .catch(() => {
-        setError("Erro ao carregar promoções");
-        setLoading(false);
-      });
-  }, []);
-
+export default function Promocoes({ produtos = [], loading, error }) {
   return (
     <section className={styles.promocoesSection}>
       <h2 className={styles.promocoesTitle}>Promoções</h2>

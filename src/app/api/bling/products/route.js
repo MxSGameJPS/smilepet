@@ -76,6 +76,9 @@ export async function GET(request) {
       }
     }
     if (cached && Array.isArray(cached) && cached.length > 0) {
+      console.log(
+        `[Bling API] Retornando produtos do cache (${cacheKey}) - total: ${cached.length}`
+      );
       return NextResponse.json({ data: cached });
     } else if (
       cached &&
@@ -83,6 +86,9 @@ export async function GET(request) {
       Array.isArray(cached.data) &&
       cached.data.length > 0
     ) {
+      console.log(
+        `[Bling API] Retornando produtos do cache (${cacheKey}) - total: ${cached.data.length}`
+      );
       return NextResponse.json({ data: cached.data });
     }
     // Se não tem cache ou está vazio, busca da API Bling

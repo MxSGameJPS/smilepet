@@ -1,42 +1,17 @@
 "use client";
-import { useEffect, useState } from "react";
 import styles from "./featuredProducts.module.css";
 
-export default function FeaturedProducts() {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    fetch("/api/bling/products")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.error) setError(data.error);
-        else {
-          let arr = [];
-          if (Array.isArray(data.data)) arr = data.data;
-          else if (Array.isArray(data.retorno)) arr = data.retorno;
-          else if (Array.isArray(data.retorno?.produtos))
-            arr = data.retorno.produtos;
-          else if (Array.isArray(data.produtos)) arr = data.produtos;
-          setProducts(arr.filter((p) => p && p.id));
-        }
-      })
-      .catch(() => setError("Erro ao buscar produtos."))
-      .finally(() => setLoading(false));
-  }, []);
-
+export default function FeaturedProducts({ produtos = [], loading, error }) {
   return (
     <section className={styles.featuredSection}>
       <h2 className={styles.title}>Destaques para seu Pet</h2>
       {loading && <p>Carregando produtos...</p>}
       {error && <p className={styles.error}>{error}</p>}
-      {!loading && !error && products.length === 0 && (
+      {!loading && !error && produtos.length === 0 && (
         <p className={styles.error}>Nenhum produto encontrado.</p>
       )}
       <div className={styles.productsGrid}>
-        {products.slice(0, 4).map((prod, i) => {
-          // Ajuste conforme estrutura real do retorno da API do Bling
+        {produtos.slice(0, 4).map((prod, i) => {
           const nome =
             prod.nome || prod.descricao || prod.codigo || prod.id || "Produto";
           let preco = prod.preco || prod.precoVenda || prod.valor || "-";
