@@ -1,0 +1,137 @@
+.carrinhoQtdWrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+.carrinhoQtdBtn {
+  background: #f5f5f5;
+  color: #2d2d2d;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.carrinhoQtdBtn:hover {
+  background: #e0e0e0;
+}
+.carrinhoQtdValor {
+  min-width: 24px;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #2d8fdd;
+}
+.carrinhoRemoverBtn {
+  background: #ff4d4f;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  margin-left: 24px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.carrinhoRemoverBtn:hover {
+  background: #d9363e;
+}
+.carrinhoResumo {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+  font-size: 1.2rem;
+}
+.carrinhoTotalLabel {
+  color: #555;
+  font-weight: 500;
+}
+.carrinhoTotalValor {
+  color: #2d8fdd;
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+.carrinhoAcoes {
+  display: flex;
+  gap: 20px;
+  justify-content: flex-end;
+  margin-top: 32px;
+}
+.carrinhoBtn {
+  background: #f5f5f5;
+  color: #2d2d2d;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 12px 28px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.carrinhoBtn:hover {
+  background: #e0e0e0;
+}
+.carrinhoBtnFinalizar {
+  background: #2d8fdd;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 28px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.carrinhoBtnFinalizar:hover {
+  background: #176bb3;
+}
+.carrinhoContainer {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 24px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+}
+.carrinhoTitulo {
+  font-size: 2rem;
+  margin-bottom: 24px;
+  color: #2d2d2d;
+}
+.carrinhoVazio {
+  color: #888;
+  font-size: 1.2rem;
+  text-align: center;
+}
+.carrinhoLista {
+  list-style: none;
+  padding: 0;
+}
+.carrinhoItem {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 16px 0;
+  border-bottom: 1px solid #eee;
+  color: #2d2d2d;
+}
+
+.carrinhoPreco {
+  font-size: 1.2rem;
+  color: #009966;
+  font-weight: bold;
+  margin: 10px 0;
+}
+.carrinhoImagem {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: #f7f7f7;
+}

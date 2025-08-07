@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import {
@@ -16,7 +16,33 @@ import Link from "next/link";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
   const router = useRouter();
+
+  // Atualiza o número do carrinho ao montar e quando localStorage muda
+  useEffect(() => {
+    function updateCartCount() {
+      const itens = localStorage.getItem("carrinho");
+      if (itens) {
+        const arr = JSON.parse(itens);
+        const total = arr.reduce(
+          (acc, item) => acc + (item.quantidade || 1),
+          0
+        );
+        setCartCount(total);
+      } else {
+        setCartCount(0);
+      }
+    }
+    updateCartCount();
+    window.addEventListener("storage", updateCartCount);
+    // Atualiza também quando a página do carrinho faz alterações
+    const interval = setInterval(updateCartCount, 500);
+    return () => {
+      window.removeEventListener("storage", updateCartCount);
+      clearInterval(interval);
+    };
+  }, []);
   return (
     <header className={styles.headerV2}>
       <div className={styles.headerRow}>
@@ -77,9 +103,14 @@ export default function Header() {
           <FaStore title="Lojas" />
           <FaHeart title="Favoritos" />
           <FaRegCreditCard title="Planos" />
-          <div className={styles.cartIconWrap}>
+          <div
+            className={styles.cartIconWrap}
+            style={{ cursor: "pointer" }}
+            onClick={() => router.push("/carrinho")}
+            title="Ir para o carrinho"
+          >
             <FaShoppingCart title="Carrinho" />
-            <span className={styles.cartBadge}>0</span>
+            <span className={styles.cartBadge}>{cartCount}</span>
           </div>
           <FaUser title="Conta" />
           <div className={styles.cartLoginContainer}>

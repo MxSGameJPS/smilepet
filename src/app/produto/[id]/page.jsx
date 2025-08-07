@@ -33,6 +33,18 @@ export default function Page({ params }) {
   if (loading) return <div>Carregando...</div>;
   if (!produto) return <div>Produto não encontrado.</div>;
 
+  // Função para adicionar ao carrinho
+  function handleAddCarrinho() {
+    if (!produto) return;
+    // Recupera carrinho atual
+    const carrinhoAtual = JSON.parse(localStorage.getItem("carrinho") || "[]");
+    // Adiciona produto
+    carrinhoAtual.push(produto);
+    localStorage.setItem("carrinho", JSON.stringify(carrinhoAtual));
+    // Redireciona para página do carrinho
+    router.push("/carrinho");
+  }
+
   return (
     <div>
       <Header />
@@ -53,7 +65,9 @@ export default function Page({ params }) {
             {produto.promocao && (
               <span className={styles.produtoPromocao}>Promoção!</span>
             )}
-            <button className={styles.produtoBtn}>Adicionar ao carrinho</button>
+            <button className={styles.produtoBtn} onClick={handleAddCarrinho}>
+              Adicionar ao carrinho
+            </button>
             <div className={styles.produtoDescricao}>
               <h2 className={styles.produtoSubtitulo}>Descrição</h2>
               <div
@@ -72,7 +86,7 @@ export default function Page({ params }) {
                   dangerouslySetInnerHTML={{
                     __html: produto.descricao_completa,
                   }}
-                    className={styles.produtoDescricaoTexto}
+                  className={styles.produtoDescricaoTexto}
                 />
               </div>
             )}
