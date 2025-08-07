@@ -1,7 +1,25 @@
 "use client";
 import styles from "./featuredProducts.module.css";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
-export default function FeaturedProducts({ produtos = [], loading, error }) {
+export default function FeaturedProducts({ loading, error }) {
+  const [produtos, setProdutos] = useState([]);
+
+  useEffect(() => {
+    async function fetchMock() {
+      try {
+        const res = await fetch("/mocks/produtos.json");
+        const data = await res.json();
+        setProdutos(Array.isArray(data) ? data : []);
+      } catch {
+        setProdutos([]);
+      }
+    }
+    fetchMock();
+  }, []);
+
+  const router = useRouter();
   return (
     <section className={styles.featuredSection}>
       <h2 className={styles.title}>Destaques para seu Pet</h2>
@@ -19,9 +37,18 @@ export default function FeaturedProducts({ produtos = [], loading, error }) {
             const num = Number(preco);
             preco = isNaN(num) ? preco : num.toFixed(2).replace(".", ",");
           }
-          const img = prod.imagemURL || "/logo.jpeg";
+          // Usa imagem do produto ou um placeholder
+          const img =
+            prod.imagem_url && prod.imagem_url.length > 0
+              ? prod.imagem_url
+              : "/mocks/produtos.png";
           return (
-            <div className={styles.productCard} key={prod.id || i}>
+            <div
+              className={styles.productCard}
+              key={prod.id || i}
+              style={{ cursor: "pointer" }}
+              onClick={() => prod.id && router.push(`/produto/${prod.id}`)}
+            >
               <img src={img} alt={nome} className={styles.productImg} />
               <div className={styles.productInfo}>
                 <span className={styles.productName}>{nome}</span>

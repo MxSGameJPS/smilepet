@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import {
   FaStore,
@@ -15,6 +16,7 @@ import Link from "next/link";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const router = useRouter();
   return (
     <header className={styles.headerV2}>
       <div className={styles.headerRow}>
@@ -29,11 +31,12 @@ export default function Header() {
             {menuOpen ? <FaTimes /> : <FaBars />}
           </button>
           <Image
-            src="/logo.jpeg"
+            src="/mocks/produtos.png"
             alt="Logo SmilePet"
-            width={110}
-            height={110}
+            width={100}
+            height={100}
             className={styles.logoHeaderV2}
+            onClick={() => router.push("/")}
           />
         </div>
         <div className={styles.centerArea}>

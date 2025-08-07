@@ -1,0 +1,76 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 16px;
+}
+.flexContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.titulo {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 32px;
+  text-align: center;
+  color: var(--smilepet-verde);
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+  width: 100%;
+  margin-bottom: 32px;
+}
+.card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #333;
+}
+.produtoImg {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+.nome {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+  text-align: center;
+}
+.preco {
+  font-size: 1.2rem;
+  color: #0099ff;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+.verMaisBtn {
+  background: #0099ff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 32px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.verMaisBtn:hover {
+  background: #007acc;
+}
+.footer {
+  width: 100%;
+  text-align: center;
+  padding: 24px 0 12px 0;
+  background: #f7f7f7;
+  color: #888;
+  font-size: 1rem;
+  margin-top: 48px;
+}

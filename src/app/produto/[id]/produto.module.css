@@ -1,0 +1,65 @@
+/* Estilos para página de produto */
+.produtoContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+.produtoFlex {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.produtoImagem {
+  min-width: 320px;
+  width: 320px;
+  height: 320px;
+  object-fit: contain;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #eee;
+}
+.produtoInfo {
+  flex: 1;
+  color: #333;
+}
+.produtoTitulo {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a237e;
+}
+.produtoPreco {
+  font-size: 1.5rem;
+  color: #ff9800;
+  font-weight: 600;
+}
+.produtoPromocao {
+  color: #e53935;
+  font-weight: 600;
+  margin-left: 8px;
+}
+.produtoBtn {
+  padding: 0.75rem 2rem;
+  background: #ff9800;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  margin: 1rem 0;
+}
+.produtoDescricao {
+  margin: 1.5rem ;
+}
+.produtoDescricaoTexto {
+  margin: 1rem 0;
+  color: #555;
+}
+
+.produtoSku {
+  margin: 1.5rem 0;
+}
+.produtoSubtitulo {
+  font-size: 1.2rem;
+  font-weight: 600;
+}

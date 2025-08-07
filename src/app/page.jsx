@@ -39,36 +39,17 @@ export default function Home() {
           console.log("[HOME] Usando cache localStorage");
           produtosPai = cacheArray;
         } else {
-          console.log("[HOME] Buscando produtos da API /api/bling/products");
-          const res = await fetch("/api/bling/products");
-          const data = await res.json();
-          const produtos = Array.isArray(data?.data) ? data.data : [];
-          produtosPai = produtos.filter((prod) => !prod.idProdutoPai);
           console.log(
-            `[HOME] Quantidade de produtos encontrados na API: ${produtosPai.length}`
+            "[HOME] Buscando produtos do mock local /mocks/produtos.json"
           );
+          const res = await fetch("/mocks/produtos.json");
+          const data = await res.json();
+          const produtos = Array.isArray(data) ? data : [];
+          produtosPai = produtos;
           localStorage.setItem("produtosCache", JSON.stringify(produtosPai));
           localStorage.setItem("produtosCacheTime", String(now));
         }
         setProdutos(produtosPai);
-        // Após atualizar o estado, carrega as imagens detalhadas dos produtos
-        if (produtosPai.length > 0) {
-          const produtosComImagem = await Promise.all(
-            produtosPai.map(async (prod) => {
-              try {
-                const res = await fetch(`/api/bling/products/${prod.id}`);
-                const data = await res.json();
-                const imgOriginal =
-                  data?.imagemOriginal ||
-                  data?.data?.midia?.imagens?.internas?.[0]?.link;
-                return { ...prod, imagemURL: imgOriginal || prod.imagemURL };
-              } catch {
-                return prod;
-              }
-            })
-          );
-          setProdutos(produtosComImagem);
-        }
       } catch (e) {
         setProdutos([]);
       } finally {

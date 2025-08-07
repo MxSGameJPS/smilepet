@@ -27,11 +27,10 @@
 }
 .logoHeaderV2 {
   border-radius: 50%;
-  background: #ffe600;
   border: 3px solid #1e4fa3;
   box-shadow: 0 2px 8px 0 rgba(30, 79, 163, 0.1);
-  width: 110px !important;
-  height: 110px !important;
+  width: 130px !important;
+  height: 130px !important;
 }
 .centerArea {
   flex: 1 1 0;
