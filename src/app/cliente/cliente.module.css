@@ -1,0 +1,182 @@
+.pedidoImagem {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: #fff;
+  margin-right: 24px;
+}
+.pedidoInfoWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+.pedidoNome {
+  font-size: 1.05rem;
+  color: #222;
+  font-weight: 500;
+}
+.pedidoData {
+  font-size: 0.98rem;
+  color: #888;
+}
+.pedidoValor {
+  font-size: 1rem;
+  color: #2d8fdd;
+  font-weight: 600;
+}
+.status-entregue {
+  background: #14532d;
+  color: #14532d;
+  border: 1px solid #14532d;
+}
+.status-aguardandopagamento {
+  background: #b59f00;
+  color: #b59f00;
+  border: 1px solid #ffe066;
+}
+.status-cancelado {
+  background: #c62828;
+  color: #c62828;
+  border: 1px solid #c62828;
+}
+.status-acaminho {
+  background: #388e3c;
+  color: #388e3c;
+  border: 1px solid #b2dfdb;
+}
+.pedidoStatus {
+  font-size: 1rem;
+  border-radius: 6px;
+  padding: 8px 18px;
+  text-transform: capitalize;
+  font-weight: 500;
+  margin-left: 24px;
+  min-width: 160px;
+  text-align: center;
+}
+.pedidosLista {
+  list-style: none;
+  padding: 0;
+  margin: 24px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.pedidoItem {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  background: #f7f7f7;
+  border-radius: 8px;
+  padding: 18px 24px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
+}
+.pedidoNum {
+  font-weight: 600;
+  color: #2d8fdd;
+  font-size: 1.1rem;
+}
+.pedidoStatus {
+  font-size: 1rem;
+  color: #fdfdfd;
+  border-radius: 6px;
+  padding: 6px 16px;
+  text-transform: capitalize;
+}
+.clienteLayout {
+  display: flex;
+  gap: 40px;
+  min-height: 80vh;
+  background: #f7f7f7;
+  padding: 40px 0;
+}
+.menuAside {
+  min-width: 220px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 32px 18px;
+  height: fit-content;
+}
+.menuBtn {
+  background: #2d8fdd;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 0;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.menuBtn:hover {
+  background: #176bb3;
+}
+.clienteMain {
+  flex: 1;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+  padding: 32px 28px;
+  min-width: 320px;
+}
+.sectionTitulo {
+  font-size: 1.3rem;
+  margin-bottom: 18px;
+  color: #2d8fdd;
+}
+.dadosForm,
+.enderecoForm,
+.contatoForm {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px 32px;
+  margin-bottom: 24px;
+}
+.dadosForm label,
+.enderecoForm label,
+.contatoForm label {
+  flex: 1 1 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-weight: 500;
+  color: #444;
+}
+.dadosForm input,
+.enderecoForm input,
+.contatoForm input,
+.dadosForm select {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+}
+.abasWrap {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.abaBtn {
+  background: #f5f5f5;
+  color: #2d2d2d;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px 24px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.abaBtnAtiva {
+  background: #2d8fdd;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 24px;
+  font-size: 1rem;
+  cursor: pointer;
+}

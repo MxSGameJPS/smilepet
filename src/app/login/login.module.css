@@ -1,0 +1,73 @@
+.bannerWrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  background: #f7f7f7;
+}
+.banner {
+  max-width: 600px;
+  width: 100%;
+  border-radius: 12px;
+  margin: 32px 0 0 0;
+}
+.loginContainer {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 32px 24px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+  margin-bottom: 40px;
+}
+.loginTitulo {
+  font-size: 2rem;
+  margin-bottom: 24px;
+  color: #2d2d2d;
+  text-align: center;
+}
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.loginForm label {
+  font-weight: 500;
+  color: #444;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.loginForm input[type="email"],
+.loginForm input[type="password"] {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+}
+.loginBtn {
+  background: #2d8fdd;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 0;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin-top: 12px;
+  transition: background 0.2s;
+}
+.loginBtn:hover {
+  background: #176bb3;
+}
+.loginLinks {
+  margin-top: 24px;
+  text-align: center;
+  color: #555;
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.loginLinks a {
+  color: #2d8fdd;
+  text-decoration: underline;
+}
