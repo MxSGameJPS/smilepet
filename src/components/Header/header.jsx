@@ -100,9 +100,19 @@ export default function Header() {
           )}
         </div>
         <div className={styles.headerIcons}>
-          <FaStore title="Lojas" />
+          <span
+            style={{ cursor: "pointer" }}
+            onClick={() => router.push("/lojas")}
+          >
+            <FaStore title="Lojas" />
+          </span>
           <FaHeart title="Favoritos" />
-          <FaRegCreditCard title="Planos" />
+          <span
+            style={{ cursor: "pointer" }}
+            onClick={() => router.push("/assinaturas")}
+          >
+            <FaRegCreditCard title="Planos" />
+          </span>
           <div
             className={styles.cartIconWrap}
             style={{ cursor: "pointer" }}
@@ -112,7 +122,15 @@ export default function Header() {
             <FaShoppingCart title="Carrinho" />
             <span className={styles.cartBadge}>{cartCount}</span>
           </div>
-          <FaUser title="Conta" />
+          <span
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              const isLogged = localStorage.getItem("usuarioLogado") === "true";
+              router.push(isLogged ? "/cliente" : "/login");
+            }}
+          >
+            <FaUser title="Conta" />
+          </span>
           <div className={styles.cartLoginContainer}>
             <span className={styles.cartLogin}>
               <Link href="/login">Entrar</Link>

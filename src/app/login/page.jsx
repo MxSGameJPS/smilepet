@@ -14,6 +14,7 @@ export default function LoginPage() {
     // Mock de login
     if (email === "testesite@teste.com" && senha === "teste123") {
       alert("Login realizado! Bem-vindo à área do cliente.");
+      localStorage.setItem("usuarioLogado", "true");
       window.location.href = "/cliente";
     } else {
       alert("Email ou senha inválidos!");

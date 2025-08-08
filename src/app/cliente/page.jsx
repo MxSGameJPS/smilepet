@@ -104,6 +104,7 @@ export default function ClientePage() {
 
   function handleLogout() {
     alert("Logout realizado!");
+    localStorage.removeItem("usuarioLogado");
     window.location.href = "/login";
   }
 
