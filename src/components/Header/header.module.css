@@ -1,3 +1,40 @@
+.menuDropdown {
+  position: relative;
+  display: inline-block;
+}
+.menuDropdownTrigger {
+  cursor: pointer;
+  padding: 0 12px;
+  transition: color 0.2s;
+}
+.menuDropdownContent {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 100%;
+  min-width: 160px;
+  background: #f7f7f7;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  z-index: 10;
+  padding: 12px 12px;
+}
+.menuDropdown:hover .menuDropdownContent,
+.menuDropdown:focus-within .menuDropdownContent {
+  display: block;
+}
+.menuDropdownContent a {
+  display: block;
+  padding: 8px 18px;
+  color: #2d2d2d;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+.menuDropdownContent a:hover {
+  background: #f7f7f7;
+  color: #2d8fdd;
+}
 /* HEADER V2 - Layout horizontal organizado */
 .headerV2 {
   width: 100vw;
@@ -43,19 +80,19 @@
 }
 
 .cartLogin {
-    color: #1e4fa3;
-    font-weight: 700;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: color 0.2s;
+  color: #1e4fa3;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: color 0.2s;
 }
 
 .cartLoginContainer {
-    display: flex;
-    align-items: start;
-    gap: 12px;
-    color: #1e4fa3;
-    flex-direction: column;
+  display: flex;
+  align-items: start;
+  gap: 12px;
+  color: #1e4fa3;
+  flex-direction: column;
 }
 .headerSearch {
   width: 100%;
@@ -79,6 +116,7 @@
   justify-content: center;
   gap: 32px;
   margin: 0.5rem 0 0 0;
+  align-items: center;
 }
 .menuV2 a {
   color: #1e4fa3;

@@ -73,8 +73,26 @@ export default function Header() {
           />
           <nav className={styles.menuV2}>
             <Link href="/assinaturas">Planos de Assinatura</Link>
-            <Link href="/caes">Cachorros</Link>
-            <Link href="/gatos">Gatos</Link>
+            <div className={styles.menuDropdown}>
+              <Link href="/caes" className={styles.menuDropdownTrigger}>
+                Cachorros
+              </Link>
+              <div className={styles.menuDropdownContent}>
+                <Link href="/caes?categoria=racao-umida">Ração úmida</Link>
+                <Link href="/caes?categoria=snacks">Snacks</Link>
+                <Link href="/caes?categoria=higiene">Higiene</Link>
+              </div>
+            </div>
+            <div className={styles.menuDropdown}>
+              <Link href="/gatos" className={styles.menuDropdownTrigger}>
+                Gatos
+              </Link>
+              <div className={styles.menuDropdownContent}>
+                <Link href="/gatos?categoria=racao-umida">Ração úmida</Link>
+                <Link href="/gatos?categoria=snacks">Snacks</Link>
+                <Link href="/gatos?categoria=higiene">Higiene</Link>
+              </div>
+            </div>
             <Link href="/promocoes">Promoções</Link>
             <Link href="/lojas">Nossas Lojas</Link>
           </nav>
