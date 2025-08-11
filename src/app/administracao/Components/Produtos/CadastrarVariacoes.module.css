@@ -1,0 +1,74 @@
+.container {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+.title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 12px;
+  color: #333;
+}
+.msg {
+  color: #666;
+  font-size: 1rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+.input {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  background: #fafafa;
+  color: #333;
+}
+.input:focus {
+  outline: 2px solid #a0c4ff;
+}
+.label {
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 4px;
+}
+.button {
+  padding: 10px 18px;
+  background: #4f8cff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.button:hover {
+  background: #357ae8;
+}
+
+.listaProdutos {
+  list-style: none;
+  padding: 0;
+  margin-top: 16px;
+  color: #333;
+}
+.itemProduto {
+  background: #f7f7f7;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  padding: 12px 16px;
+  font-size: 1rem;
+  transition: background 0.2s;
+  cursor: pointer;
+}
+.itemProduto:hover,
+.itemProduto:focus {
+  background: #e0e0e0;
+  outline: none;
+}

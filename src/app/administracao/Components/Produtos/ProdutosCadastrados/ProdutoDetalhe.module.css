@@ -1,0 +1,85 @@
+.container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 32px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.info {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.imagem {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
+
+.formEdit {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  background: #fff;
+}
+
+.button {
+  padding: 10px 18px;
+  background: #0070f3;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 8px;
+  margin-right: 8px;
+  transition: background 0.2s;
+}
+.button:hover {
+  background: #005bb5;
+}
+
+.imagemActions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.voltar {
+  background: #eee;
+  color: #333;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+.voltar:hover {
+  background: #ccc;
+}
+
+.msg {
+  text-align: center;
+  margin-bottom: 16px;
+  color: #0070f3;
+}
