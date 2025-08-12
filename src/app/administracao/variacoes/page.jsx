@@ -1,9 +1,9 @@
 "use client";
 import VariacoesProduto from "../Components/Produtos/VariacoesProduto";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useState } from "react";
 
-function VariacoesContent() {
+export default function VariacoesPage() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const [finalizado, setFinalizado] = useState(false);
@@ -34,13 +34,5 @@ function VariacoesContent() {
       imagensPai={{ imagem_url: "", imagens_secundarias: [] }}
       onFinalizar={() => setFinalizado(true)}
     />
-  );
-}
-
-export default function VariacoesPage() {
-  return (
-    <Suspense fallback={<div>Carregando...</div>}>
-      <VariacoesContent />
-    </Suspense>
   );
 }

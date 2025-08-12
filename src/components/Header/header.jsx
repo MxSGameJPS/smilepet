@@ -94,7 +94,7 @@ export default function Header() {
               </div>
             </div>
             <Link href="/promocoes">Promoções</Link>
-            <Link href="/lojas">Nossas Lojas</Link>
+            <Link href="/lojas">Compre no Atacado</Link>
           </nav>
           {/* Menu mobile, aparece só se menuOpen=true */}
           {menuOpen && (

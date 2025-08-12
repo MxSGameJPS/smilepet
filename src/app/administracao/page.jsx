@@ -6,6 +6,8 @@ import CadastrarProduto from "./Components/Produtos/CadastrarProduto";
 import ProdutosCadastrados from "./Components/Produtos/ProdutosCadastrados/ProdutosCadastrados";
 import ProdutoDetalhe from "./Components/Produtos/ProdutosCadastrados/ProdutoDetalhe";
 import CadastrarVariacoes from "./Components/Produtos/CadastrarVariacoes";
+import CadastroCategoria from "./Components/CadastroCategoria/CadastroCategoria";
+import CategoriasCadastradas from "./Components/CadastroCategoria/CategoriasCadastradas";
 
 export default function PainelAdm() {
   const [autenticado, setAutenticado] = useState(false);
@@ -46,7 +48,10 @@ export default function PainelAdm() {
               </button>
             </li>
             <li>
-              <button className={styles.menuButton}>
+              <button
+                className={styles.menuButton}
+                onClick={() => setTela("cadastroCategoria")}
+              >
                 Cadastro de Categoria
               </button>
             </li>
@@ -88,6 +93,27 @@ export default function PainelAdm() {
               </div>
             </div>
           )}
+
+        {tela === "cadastroCategoria" &&
+          tela !== "cadastrarCategoria" &&
+          tela !== "categoriasCadastradas" && (
+            <div className={styles.cardsContainer}>
+              <div
+                className={styles.card}
+                onClick={() => setTela("cadastrarCategoria")}
+              >
+                <h2>Cadastrar Categorias</h2>
+              </div>
+              <div
+                className={styles.card}
+                onClick={() => setTela("categoriasCadastradas")}
+              >
+                <h2>Categorias Cadastradas</h2>
+              </div>
+            </div>
+          )}
+        {tela === "cadastrarCategoria" && <CadastroCategoria />}
+        {tela === "categoriasCadastradas" && <CategoriasCadastradas />}
         {tela === "cadastrarVariacoes" && <CadastrarVariacoes />}
         {tela === "cadastrarProduto" && <CadastrarProduto />}
         {tela === "produtosCadastrados" && (
