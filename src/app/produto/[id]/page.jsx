@@ -11,18 +11,41 @@ export default function Page({ params }) {
   const id = awaitedParams?.id;
   const [produto, setProduto] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [variacoes, setVariacoes] = useState([]);
+  const [variacaoSelecionada, setVariacaoSelecionada] = useState(null);
 
   useEffect(() => {
     if (!id) return;
     async function fetchProduto() {
       setLoading(true);
       try {
-        const res = await fetch("/mocks/produtos.json");
-        const produtos = await res.json();
-        const encontrado = produtos.find((p) => p.id === id);
-        setProduto(encontrado || null);
+        const res = await fetch(
+          `https://apismilepet.vercel.app/api/produtos/${id}`
+        );
+        if (!res.ok) throw new Error("Produto não encontrado");
+        const produtoApi = await res.json();
+        setProduto(produtoApi || null);
+        // Buscar variações
+        const resVar = await fetch(
+          `https://apismilepet.vercel.app/api/produtos/variacoes/${id}`
+        );
+        if (resVar.ok) {
+          const dataVar = await resVar.json();
+          if (
+            dataVar.data &&
+            Array.isArray(dataVar.data.variacoes) &&
+            dataVar.data.variacoes.length > 0
+          ) {
+            setVariacoes(dataVar.data.variacoes);
+          } else {
+            setVariacoes([]);
+          }
+        } else {
+          setVariacoes([]);
+        }
       } catch {
         setProduto(null);
+        setVariacoes([]);
       } finally {
         setLoading(false);
       }
@@ -38,8 +61,11 @@ export default function Page({ params }) {
     if (!produto) return;
     // Recupera carrinho atual
     const carrinhoAtual = JSON.parse(localStorage.getItem("carrinho") || "[]");
-    // Adiciona produto
-    carrinhoAtual.push(produto);
+    // Adiciona produto (se variação selecionada, adiciona ela)
+    const produtoParaCarrinho = { ...(variacaoSelecionada || produto) };
+    // Garante que preco seja número
+    produtoParaCarrinho.preco = Number(produtoParaCarrinho.preco);
+    carrinhoAtual.push(produtoParaCarrinho);
     localStorage.setItem("carrinho", JSON.stringify(carrinhoAtual));
     // Redireciona para página do carrinho
     router.push("/carrinho");
@@ -58,10 +84,51 @@ export default function Page({ params }) {
             />
           </div>
           <div className={styles.produtoInfo}>
-            <h1 className={styles.produtoTitulo}>{produto.nome}</h1>
+            <h1 className={styles.produtoTitulo}>
+              {variacaoSelecionada ? variacaoSelecionada.nome : produto.nome}
+            </h1>
             <p className={styles.produtoPreco}>
-              R$ {produto.preco?.toFixed(2)}
+              R${" "}
+              {variacaoSelecionada
+                ? Number(variacaoSelecionada.preco).toFixed(2).replace(".", ",")
+                : produto.preco
+                ? Number(produto.preco).toFixed(2).replace(".", ",")
+                : "-"}
             </p>
+            {variacoes.length > 0 && (
+              <div className={styles.variacoesContainer}>
+                <span>Variações:</span>
+                <button
+                  key={produto.id}
+                  className={styles.variacaoBtn}
+                  type="button"
+                  onClick={() => setVariacaoSelecionada(null)}
+                  style={{
+                    margin: "0 4px",
+                    background: !variacaoSelecionada ? "#0070f3" : "#eee",
+                    color: !variacaoSelecionada ? "#fff" : "#333",
+                  }}
+                >
+                  {produto.nome}
+                </button>
+                {variacoes.map((v) => (
+                  <button
+                    key={v.id}
+                    className={styles.variacaoBtn}
+                    type="button"
+                    onClick={() => setVariacaoSelecionada(v)}
+                    style={{
+                      margin: "0 4px",
+                      background:
+                        variacaoSelecionada?.id === v.id ? "#0070f3" : "#eee",
+                      color: variacaoSelecionada?.id === v.id ? "#fff" : "#333",
+                    }}
+                  >
+                    {v.nome}
+                  </button>
+                ))}
+              </div>
+            )}
             {produto.promocao && (
               <span className={styles.produtoPromocao}>Promoção!</span>
             )}

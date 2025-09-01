@@ -10,6 +10,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "orgbling.s3.amazonaws.com",
       },
+      {
+        protocol: "https",
+        hostname: "purina.com.br",
+      },
     ],
   },
 };

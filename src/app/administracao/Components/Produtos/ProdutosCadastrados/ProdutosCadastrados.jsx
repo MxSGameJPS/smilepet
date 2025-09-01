@@ -10,6 +10,7 @@ export default function ProdutosCadastrados() {
   const [editandoProduto, setEditandoProduto] = useState(null);
   const [formProduto, setFormProduto] = useState({});
   const [loadingForm, setLoadingForm] = useState(false);
+  const [categorias, setCategorias] = useState([]);
 
   async function handleDeleteProduto(id) {
     setMsg("");
@@ -49,7 +50,23 @@ export default function ProdutosCadastrados() {
       }
       setLoading(false);
     }
+    async function fetchCategorias() {
+      try {
+        const res = await fetch(
+          "https://apismilepet.vercel.app/api/categorias/produtos"
+        );
+        const data = await res.json();
+        if (res.ok && Array.isArray(data)) {
+          setCategorias(data);
+        } else {
+          setCategorias([]);
+        }
+      } catch {
+        setCategorias([]);
+      }
+    }
     fetchProdutos();
+    fetchCategorias();
   }, []);
 
   async function handleExpand(id) {
@@ -146,58 +163,145 @@ export default function ProdutosCadastrados() {
               </div>
               {/* Formulário de edição do produto */}
               {editandoProduto === produto.id && (
-                <div style={{ marginTop: 12 }}>
-                  <input
-                    className={styles.input}
-                    name="nome"
-                    type="text"
-                    value={formProduto.nome || ""}
-                    onChange={handleChangeProduto}
-                  />
-                  <input
-                    className={styles.input}
-                    name="sku"
-                    type="text"
-                    value={formProduto.sku || ""}
-                    onChange={handleChangeProduto}
-                  />
-                  <input
-                    className={styles.input}
-                    name="categoria"
-                    type="text"
-                    value={formProduto.categoria || ""}
-                    onChange={handleChangeProduto}
-                  />
-                  <input
-                    className={styles.input}
-                    name="preco"
-                    type="number"
-                    value={formProduto.preco || ""}
-                    onChange={handleChangeProduto}
-                  />
-                  <input
-                    className={styles.input}
-                    name="estoque"
-                    type="number"
-                    value={formProduto.estoque || ""}
-                    onChange={handleChangeProduto}
-                  />
-                  <button
-                    className={styles.apagar}
-                    style={{ background: "#0070f3" }}
-                    onClick={handleSalvarProduto}
-                    disabled={loadingForm}
-                  >
-                    Salvar
-                  </button>
-                  <button
-                    className={styles.apagar}
-                    style={{ background: "#eee", color: "#333" }}
-                    onClick={() => setEditandoProduto(null)}
-                  >
-                    Cancelar
-                  </button>
-                </div>
+                <form
+                  style={{
+                    marginTop: 12,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 12,
+                  }}
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleSalvarProduto();
+                  }}
+                >
+                  <label className={styles.label}>
+                    Nome do Produto
+                    <input
+                      className={styles.input}
+                      name="nome"
+                      type="text"
+                      value={formProduto.nome || ""}
+                      onChange={handleChangeProduto}
+                    />
+                  </label>
+                  <label className={styles.label}>
+                    SKU
+                    <input
+                      className={styles.input}
+                      name="sku"
+                      type="text"
+                      value={formProduto.sku || ""}
+                      onChange={handleChangeProduto}
+                    />
+                  </label>
+                  <label className={styles.label}>
+                    Categoria
+                    <select
+                      className={styles.input}
+                      name="categoria"
+                      value={formProduto.categoria || ""}
+                      onChange={handleChangeProduto}
+                    >
+                      <option value="">Selecione uma categoria</option>
+                      {categorias.map((cat) => (
+                        <option key={cat.id} value={cat.nome}>
+                          {cat.nome}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className={styles.label}>
+                    Preço
+                    <input
+                      className={styles.input}
+                      name="preco"
+                      type="number"
+                      value={formProduto.preco || ""}
+                      onChange={handleChangeProduto}
+                    />
+                  </label>
+                  <label className={styles.label}>
+                    Estoque
+                    <input
+                      className={styles.input}
+                      name="estoque"
+                      type="number"
+                      value={formProduto.estoque || ""}
+                      onChange={handleChangeProduto}
+                    />
+                  </label>
+                  <label className={styles.label}>
+                    Descrição Curta
+                    <input
+                      className={styles.input}
+                      name="descricao_curta"
+                      type="text"
+                      value={formProduto.descricao_curta || ""}
+                      onChange={handleChangeProduto}
+                      placeholder="Breve descrição do produto"
+                    />
+                  </label>
+                  <label className={styles.label}>
+                    Descrição Completa
+                    <textarea
+                      className={styles.input}
+                      name="descricao_completa"
+                      value={formProduto.descricao_completa || ""}
+                      onChange={handleChangeProduto}
+                      placeholder="Descrição detalhada do produto"
+                      rows={4}
+                    />
+                  </label>
+                  <label className={styles.label}>
+                    Imagem do Produto
+                    <div
+                      style={{ display: "flex", alignItems: "center", gap: 12 }}
+                    >
+                      {formProduto.imagem_url &&
+                        formProduto.imagem_url.length > 0 && (
+                          <img
+                            src={formProduto.imagem_url}
+                            alt="Imagem atual"
+                            style={{
+                              width: 60,
+                              height: 60,
+                              objectFit: "cover",
+                              borderRadius: 8,
+                              border: "1px solid #ccc",
+                            }}
+                          />
+                        )}
+                      <input
+                        className={styles.input}
+                        name="imagem_url"
+                        type="text"
+                        value={formProduto.imagem_url || ""}
+                        onChange={handleChangeProduto}
+                        placeholder="URL da imagem"
+                      />
+                      {/* Para upload real, seria necessário backend que aceite arquivo */}
+                    </div>
+                  </label>
+                  <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+                    <button
+                      className={styles.apagar}
+                      style={{ background: "#0070f3" }}
+                      type="submit"
+                      disabled={loadingForm}
+                    >
+                      Salvar
+                    </button>
+                    <button
+                      className={styles.apagar}
+                      style={{ background: "#eee", color: "#333" }}
+                      type="button"
+                      onClick={() => setEditandoProduto(null)}
+                    >
+                      Cancelar
+                    </button>
+                  </div>
+                </form>
               )}
               {/* Variações expandida */}
               {expandido[produto.id] && variacoes[produto.id] && (

@@ -16,7 +16,6 @@ export default function CadastrarProduto() {
     promocao: false,
     desconto_promocao: "",
   });
-  const [imagens, setImagens] = useState([]);
   const [msg, setMsg] = useState("");
   const [formFechado, setFormFechado] = useState(false);
   const [imagemUrl, setImagemUrl] = useState("");
@@ -32,27 +31,7 @@ export default function CadastrarProduto() {
     }));
   }
 
-  function handleImagensChange(e) {
-    const files = Array.from(e.target.files);
-    setImagens(
-      files.map((file) => ({ file, preview: URL.createObjectURL(file) }))
-    );
-  }
-
-  function moverImagem(indice, direcao) {
-    const novaOrdem = [...imagens];
-    const novoIndice = direcao === "cima" ? indice - 1 : indice + 1;
-    if (novoIndice < 0 || novoIndice >= novaOrdem.length) return;
-    [novaOrdem[indice], novaOrdem[novoIndice]] = [
-      novaOrdem[novoIndice],
-      novaOrdem[indice],
-    ];
-    setImagens(novaOrdem);
-  }
-
-  function removerImagem(indice) {
-    setImagens(imagens.filter((_, i) => i !== indice));
-  }
+  // Removido lógica de upload e preview de imagens
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -69,7 +48,7 @@ export default function CadastrarProduto() {
         categoria: String(form.categoria_id),
         descricao_curta: form.descricao_curta,
         descricao_completa: form.descricao_completa,
-        imagem_url: "", // pode ser preenchido depois
+        imagem_url: imagemUrl,
         imagens_secundarias: [], // pode ser preenchido depois
         estoque: Number(form.estoque) || 0,
         promocao: Boolean(form.promocao),
@@ -166,50 +145,13 @@ export default function CadastrarProduto() {
           </select>
           <input
             className={styles.input}
-            name="imagens"
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={handleImagensChange}
+            name="imagem_url"
+            type="text"
+            placeholder="URL da imagem principal"
+            value={imagemUrl}
+            onChange={(e) => setImagemUrl(e.target.value)}
+            required
           />
-          {imagens.length > 0 && (
-            <div className={styles.imagensPreview}>
-              <p>Organize a ordem das imagens (a primeira será a principal):</p>
-              <ul className={styles.imagensLista}>
-                {imagens.map((img, i) => (
-                  <li key={i} className={styles.imagemItem}>
-                    <img
-                      src={img.preview}
-                      alt={`preview-${i}`}
-                      className={styles.imagemThumb}
-                    />
-                    <div className={styles.imagemAcoes}>
-                      <button
-                        type="button"
-                        onClick={() => moverImagem(i, "cima")}
-                        disabled={i === 0}
-                      >
-                        ↑
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => moverImagem(i, "baixo")}
-                        disabled={i === imagens.length - 1}
-                      >
-                        ↓
-                      </button>
-                      <button type="button" onClick={() => removerImagem(i)}>
-                        Remover
-                      </button>
-                    </div>
-                    {i === 0 && (
-                      <span className={styles.imagemPrincipal}>Principal</span>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
           <input
             className={styles.input}
             name="estoque"

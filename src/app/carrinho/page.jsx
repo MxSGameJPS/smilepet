@@ -60,7 +60,7 @@ export default function CarrinhoPage() {
                   <div>
                     <h2>{produto.nome}</h2>
                     <p className={styles.carrinhoPreco}>
-                      R$ {produto.preco?.toFixed(2)}
+                      R$ {produto.preco ? Number(produto.preco).toFixed(2) : "-"}
                     </p>
                     <p>SKU: {produto.sku}</p>
                     <div className={styles.carrinhoQtdWrap}>
@@ -95,7 +95,7 @@ export default function CarrinhoPage() {
             <div className={styles.carrinhoResumo}>
               <span className={styles.carrinhoTotalLabel}>Total:</span>
               <span className={styles.carrinhoTotalValor}>
-                R$ {valorTotal.toFixed(2)}
+                R$ {Number(valorTotal).toFixed(2)}
               </span>
             </div>
             <div className={styles.carrinhoAcoes}>

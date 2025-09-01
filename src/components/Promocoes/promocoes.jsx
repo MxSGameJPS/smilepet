@@ -7,16 +7,21 @@ export default function Promocoes({ loading, error }) {
   const [produtos, setProdutos] = useState([]);
 
   useEffect(() => {
-    async function fetchMock() {
+    async function fetchPromocoes() {
       try {
-        const res = await fetch("/mocks/produtos.json");
-        const data = await res.json();
-        setProdutos(Array.isArray(data) ? data : []);
+        const res = await fetch("https://apismilepet.vercel.app/api/produtos");
+        if (!res.ok) throw new Error("Erro ao buscar produtos");
+        const json = await res.json();
+        console.log("Retorno da API:", json);
+        const produtosArray = Array.isArray(json.data) ? json.data : [];
+        // Filtra apenas produtos em promoção
+        const promocoes = produtosArray.filter((p) => p.promocao === true);
+        setProdutos(promocoes);
       } catch {
         setProdutos([]);
       }
     }
-    fetchMock();
+    fetchPromocoes();
   }, []);
 
   return (

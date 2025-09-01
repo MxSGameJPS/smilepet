@@ -1,3 +1,28 @@
+/* Variações */
+.variacoesContainer {
+  margin: 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.variacaoBtn {
+  padding: 0.5rem 1.2rem;
+  background: #eee;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.variacaoBtn:hover,
+.variacaoBtn:focus {
+  background: #0070f3;
+  color: #fff;
+  border-color: #0070f3;
+}
+/* Botão ativo (inline style já faz, mas pode usar classe se quiser) */
 /* Estilos para página de produto */
 .produtoContainer {
   max-width: 1200px;
@@ -49,7 +74,7 @@
   margin: 1rem 0;
 }
 .produtoDescricao {
-  margin: 1.5rem ;
+  margin: 1.5rem;
 }
 .produtoDescricaoTexto {
   margin: 1rem 0;
