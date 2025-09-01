@@ -60,7 +60,8 @@ export default function CarrinhoPage() {
                   <div>
                     <h2>{produto.nome}</h2>
                     <p className={styles.carrinhoPreco}>
-                      R$ {produto.preco ? Number(produto.preco).toFixed(2) : "-"}
+                      R${" "}
+                      {produto.preco ? Number(produto.preco).toFixed(2) : "-"}
                     </p>
                     <p>SKU: {produto.sku}</p>
                     <div className={styles.carrinhoQtdWrap}>
