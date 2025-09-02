@@ -17,46 +17,29 @@ export default function CaesPage() {
 
   useEffect(() => {
     setLoading(true);
-    fetch("/mocks/produtos.json")
+    fetch("https://apismilepet.vercel.app/api/produtos")
       .then((res) => res.json())
       .then((data) => {
         let filtrados = [];
-        if (Array.isArray(data)) {
-          if (filtro === "todas") {
-            filtrados = data.filter(
-              (p) => p.categoria && p.categoria.includes("Cães")
-            );
-          } else if (filtro === "racoes") {
-            filtrados = data.filter((p) => p.categoria === "Ração para Cães");
-          } else if (filtro === "umida") {
-            filtrados = data.filter(
-              (p) =>
-                p.categoria &&
-                p.categoria.toLowerCase().includes("úmida") &&
-                p.categoria.includes("Cães")
-            );
-            if (filtrados.length === 0) {
-              filtrados = data.filter(
-                (p) =>
-                  p.categoria === "Ração para Cães" &&
-                  p.nome.toLowerCase().includes("úmida")
-              );
-            }
-          } else if (filtro === "snaks") {
-            filtrados = data.filter(
-              (p) =>
-                p.categoria &&
-                p.categoria.toLowerCase().includes("snak") &&
-                p.categoria.includes("Cães")
-            );
-            if (filtrados.length === 0) {
-              filtrados = data.filter(
-                (p) =>
-                  p.categoria === "Ração para Cães" &&
-                  p.nome.toLowerCase().includes("snak")
-              );
-            }
-          }
+        const produtosApi = Array.isArray(data.data) ? data.data : [];
+        if (filtro === "todas") {
+          filtrados = produtosApi.filter(
+            (p) =>
+              p.categoria &&
+              (p.categoria.includes("Cães") || p.categoria.includes("Cachorro"))
+          );
+        } else if (filtro === "racoes") {
+          filtrados = produtosApi.filter(
+            (p) => p.categoria === "Ração para Cachorro"
+          );
+        } else if (filtro === "umida") {
+          filtrados = produtosApi.filter(
+            (p) => p.categoria === "Ração Úmida para Cães"
+          );
+        } else if (filtro === "snaks") {
+          filtrados = produtosApi.filter(
+            (p) => p.categoria === "Snacks para Cães"
+          );
         }
         setProdutos(filtrados);
       })

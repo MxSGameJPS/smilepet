@@ -32,46 +32,27 @@ export default function GatosPage() {
 
   useEffect(() => {
     setLoading(true);
-    fetch("/mocks/produtos.json")
+    fetch("https://apismilepet.vercel.app/api/produtos")
       .then((res) => res.json())
       .then((data) => {
         let filtrados = [];
-        if (Array.isArray(data)) {
-          if (filtro === "todas") {
-            filtrados = data.filter(
-              (p) => p.categoria && p.categoria.includes("Gatos")
-            );
-          } else if (filtro === "racao") {
-            filtrados = data.filter((p) => p.categoria === "Ração para Gatos");
-          } else if (filtro === "umida") {
-            filtrados = data.filter(
-              (p) =>
-                p.categoria &&
-                p.categoria.toLowerCase().includes("úmida") &&
-                p.categoria.includes("Gatos")
-            );
-            if (filtrados.length === 0) {
-              filtrados = data.filter(
-                (p) =>
-                  p.categoria === "Ração para Gatos" &&
-                  p.nome.toLowerCase().includes("úmida")
-              );
-            }
-          } else if (filtro === "snak") {
-            filtrados = data.filter(
-              (p) =>
-                p.categoria &&
-                p.categoria.toLowerCase().includes("snak") &&
-                p.categoria.includes("Gatos")
-            );
-            if (filtrados.length === 0) {
-              filtrados = data.filter(
-                (p) =>
-                  p.categoria === "Ração para Gatos" &&
-                  p.nome.toLowerCase().includes("snak")
-              );
-            }
-          }
+        const produtosApi = Array.isArray(data.data) ? data.data : [];
+        if (filtro === "todas") {
+          filtrados = produtosApi.filter(
+            (p) => p.categoria && p.categoria.includes("Gatos")
+          );
+        } else if (filtro === "racao") {
+          filtrados = produtosApi.filter(
+            (p) => p.categoria === "Ração para Gatos"
+          );
+        } else if (filtro === "umida") {
+          filtrados = produtosApi.filter(
+            (p) => p.categoria === "Ração Úmida para Gatos"
+          );
+        } else if (filtro === "snak") {
+          filtrados = produtosApi.filter(
+            (p) => p.categoria === "Snacks para Gatos"
+          );
         }
         setProdutos(filtrados);
       })
