@@ -70,13 +70,13 @@ export default function Header() {
   const categoriasCachorro = [
     { id: 2, nome: "Ração para Cachorro" },
     { id: 5, nome: "Ração Úmida para Cães" },
-    { id: 6, nome: "Snacks para Cães" },
+    { id: 6, nome: "Petiscos Dog" },
     { id: 8, nome: "Higiene e Cuidados para Cães" },
   ];
   const categoriasGato = [
     { id: 1, nome: "Ração para Gatos" },
     { id: 4, nome: "Ração Úmida para Gatos" },
-    { id: 7, nome: "Snacks para Gatos" },
+    { id: 7, nome: "Petiscos Cat" },
     { id: 9, nome: "Higiene e Cuidados para Gatos" },
   ];
 

@@ -1,6 +1,7 @@
 "use client";
 import styles from "./featuredProducts.module.css";
 import { useEffect, useState } from "react";
+import { getProdutosCache } from "@/lib/produtosCache";
 import { useRouter } from "next/navigation";
 
 export default function FeaturedProducts({ loading, error }) {
@@ -8,16 +9,8 @@ export default function FeaturedProducts({ loading, error }) {
 
   useEffect(() => {
     async function fetchProdutos() {
-      try {
-        const res = await fetch("https://apismilepet.vercel.app/api/produtos");
-        if (!res.ok) throw new Error("Erro ao buscar produtos");
-        const json = await res.json();
-        console.log("Retorno da API:", json);
-        const produtosArray = Array.isArray(json.data) ? json.data : [];
-        setProdutos(produtosArray);
-      } catch {
-        setProdutos([]);
-      }
+      const produtos = await getProdutosCache();
+      setProdutos(produtos);
     }
     fetchProdutos();
   }, []);

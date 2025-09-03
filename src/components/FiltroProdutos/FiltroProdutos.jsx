@@ -6,7 +6,7 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 const categoriasCaes = [
   "Ração para Cachorro",
   "Ração Úmida para Cães",
-  "Snacks para Cães",
+  "Petiscos Dog",
   "Higiene e Cuidados para Cães",
 ];
 const marcasCaes = [
@@ -26,7 +26,7 @@ const marcasCaes = [
 const categoriasGatos = [
   "Ração para Gatos",
   "Ração Úmida para Gatos",
-  "Snacks para Gatos",
+  "Petiscos Cat",
   "Higiene e Cuidados para Gatos",
 ];
 const marcasGatos = [

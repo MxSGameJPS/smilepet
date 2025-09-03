@@ -6,6 +6,7 @@ import PlanoAssinatura from "../components/PlanoAssinatura/planoAssinatura";
 import Promocoes from "../components/Promocoes/promocoes";
 import Footer from "../components/Footer/footer";
 import SplashVideo from "../components/SplashVideo";
+import { getProdutosCache } from "../lib/produtosCache";
 import { useEffect, useState } from "react";
 
 export default function Home() {
@@ -17,46 +18,9 @@ export default function Home() {
   useEffect(() => {
     async function fetchProdutos(force = false) {
       setLoading(true);
-      try {
-        const cache = localStorage.getItem("produtosCache");
-        const cacheTime = localStorage.getItem("produtosCacheTime");
-        const now = Date.now();
-        let produtosPai = [];
-        let cacheArray = [];
-        if (cache) {
-          try {
-            cacheArray = JSON.parse(cache);
-          } catch {
-            cacheArray = [];
-          }
-        }
-        if (
-          cache &&
-          cacheTime &&
-          !force &&
-          now - Number(cacheTime) < 3600000 &&
-          Array.isArray(cacheArray) &&
-          cacheArray.length > 0
-        ) {
-          console.log("[HOME] Usando cache localStorage");
-          produtosPai = cacheArray;
-        } else {
-          console.log(
-            "[HOME] Buscando produtos do mock local /mocks/produtos.json"
-          );
-          const res = await fetch("/mocks/produtos.json");
-          const data = await res.json();
-          const produtos = Array.isArray(data) ? data : [];
-          produtosPai = produtos;
-          localStorage.setItem("produtosCache", JSON.stringify(produtosPai));
-          localStorage.setItem("produtosCacheTime", String(now));
-        }
-        setProdutos(produtosPai);
-      } catch (e) {
-        setProdutos([]);
-      } finally {
-        setLoading(false);
-      }
+      const produtos = await getProdutosCache(force);
+      setProdutos(produtos);
+      setLoading(false);
     }
     fetchProdutos();
     const interval = setInterval(() => fetchProdutos(true), 3600000);
