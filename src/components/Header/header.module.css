@@ -1,3 +1,22 @@
+/* ...existing code... */
+.menuDropdownContent a {
+  display: block;
+  padding: 8px 18px;
+  color: #2d2d2d;
+  text-decoration: none;
+  font-size: 1rem !important;
+  font-weight: bold !important;
+  transition: background 0.2s;
+  position: relative;
+}
+.menuDropdownContent a::after {
+  content: ">";
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 0.9em;
+  vertical-align: middle;
+  color: #1e4fa3;
+}
 /* Item de categoria no menu dropdown */
 .menuCategoriaItem {
   position: relative;
@@ -21,7 +40,8 @@
 }
 .menuSubmenuMarcas a {
   color: #1e4fa3;
-  font-size: 0.98rem;
+  font-size: 0.8rem !important;
+  font-weight: bold !important;
   text-decoration: none;
   padding: 6px 12px;
   border-radius: 6px;
@@ -45,12 +65,14 @@
   position: absolute;
   left: 0;
   top: 100%;
-  min-width: 260px;
+  min-width: 280px;
   background: #f7f7f7;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   border-radius: 8px;
   z-index: 10;
   padding: 12px 12px;
+  font-size: 1rem !important;
+  font-weight: bold !important;
 }
 .menuDropdown:hover .menuDropdownContent,
 .menuDropdown:focus-within .menuDropdownContent {
@@ -61,7 +83,8 @@
   padding: 8px 18px;
   color: #2d2d2d;
   text-decoration: none;
-  font-size: 1rem;
+  font-size: 1rem !important;
+  font-weight: bold !important;
   transition: background 0.2s;
 }
 .menuDropdownContent a:hover {

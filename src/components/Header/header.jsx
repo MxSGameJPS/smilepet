@@ -92,12 +92,19 @@ export default function Header() {
           >
             {menuOpen ? <FaTimes /> : <FaBars />}
           </button>
-          <Image
-            src="/mocks/produtos.png"
-            alt="Logo SmilePet"
+          <video
+            src="/videos/Vídeo_Animado_de_Cão_e_Gato.mp4"
+            autoPlay
+            loop
+            muted
             width={100}
             height={100}
             className={styles.logoHeaderV2}
+            style={{
+              cursor: "pointer",
+              borderRadius: "50%",
+              objectFit: "cover",
+            }}
             onClick={() => router.push("/")}
           />
         </div>
