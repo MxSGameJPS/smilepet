@@ -3,7 +3,7 @@ import Header from "@/components/Header/header";
 import Image from "next/image";
 import FiltroProdutos from "@/components/FiltroProdutos/FiltroProdutos";
 import styles from "./caes.module.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 const banners = ["/image/banner1.png", "/image/banner2.png"];
@@ -60,7 +60,7 @@ export default function CaesPage() {
   }, [searchParams]);
 
   return (
-    <>
+    <Suspense fallback={<p>Carregando...</p>}>
       <Header />
       <section
         style={{
@@ -136,6 +136,6 @@ export default function CaesPage() {
           )}
         </div>
       </div>
-    </>
+    </Suspense>
   );
 }
