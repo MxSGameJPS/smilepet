@@ -1,3 +1,36 @@
+/* Item de categoria no menu dropdown */
+.menuCategoriaItem {
+  position: relative;
+  display: block;
+}
+
+/* Submenu de marcas */
+.menuSubmenuMarcas {
+  position: absolute;
+  left: 100%;
+  top: 0%;
+  min-width: 180px;
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  z-index: 20;
+  padding: 10px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.menuSubmenuMarcas a {
+  color: #1e4fa3;
+  font-size: 0.98rem;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: background 0.2s, color 0.2s;
+}
+.menuSubmenuMarcas a:hover {
+  background: #f7f7f7;
+  color: #e96e8b;
+}
 .menuDropdown {
   position: relative;
   display: inline-block;
@@ -12,7 +45,7 @@
   position: absolute;
   left: 0;
   top: 100%;
-  min-width: 160px;
+  min-width: 260px;
   background: #f7f7f7;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   border-radius: 8px;

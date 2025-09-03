@@ -1,51 +1,63 @@
 "use client";
 import Header from "@/components/Header/header";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import FiltroProdutos from "@/components/FiltroProdutos/FiltroProdutos";
 import styles from "./caes.module.css";
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const banners = ["/image/banner1.png", "/image/banner2.png"];
 
 export default function CaesPage() {
+  const searchParams = useSearchParams();
   const [produtos, setProdutos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filtro, setFiltro] = useState("todas");
+  const [marcaSelecionada, setMarcaSelecionada] = useState("");
   const [pagina, setPagina] = useState(1);
   const produtosPorPagina = 9;
   const router = useRouter();
 
   useEffect(() => {
+    const categoriaParam = searchParams.get("categoria");
+    const marcaParam = searchParams.get("marca");
+    setFiltro(categoriaParam || "todas");
+    setMarcaSelecionada(marcaParam || "");
     setLoading(true);
     fetch("https://apismilepet.vercel.app/api/produtos")
       .then((res) => res.json())
       .then((data) => {
         let filtrados = [];
         const produtosApi = Array.isArray(data.data) ? data.data : [];
-        if (filtro === "todas") {
+        // Filtra por categoria (suporta múltiplas)
+        let categoriasSelecionadas = [];
+        if (categoriaParam && categoriaParam !== "todas") {
+          categoriasSelecionadas = categoriaParam.split(",");
+        }
+        if (!categoriaParam || categoriaParam === "todas") {
           filtrados = produtosApi.filter(
             (p) =>
               p.categoria &&
               (p.categoria.includes("Cães") || p.categoria.includes("Cachorro"))
           );
-        } else if (filtro === "racoes") {
-          filtrados = produtosApi.filter(
-            (p) => p.categoria === "Ração para Cachorro"
+        } else {
+          filtrados = produtosApi.filter((p) =>
+            categoriasSelecionadas.includes(p.categoria)
           );
-        } else if (filtro === "umida") {
-          filtrados = produtosApi.filter(
-            (p) => p.categoria === "Ração Úmida para Cães"
-          );
-        } else if (filtro === "snaks") {
-          filtrados = produtosApi.filter(
-            (p) => p.categoria === "Snacks para Cães"
+        }
+        // Filtra por marca (suporta múltiplas)
+        let marcasSelecionadas = [];
+        if (marcaParam) {
+          marcasSelecionadas = marcaParam.split(",");
+          filtrados = filtrados.filter((p) =>
+            marcasSelecionadas.includes(p.marca)
           );
         }
         setProdutos(filtrados);
       })
       .catch(() => setProdutos([]))
       .finally(() => setLoading(false));
-  }, [filtro]);
+  }, [searchParams]);
 
   return (
     <>
@@ -66,51 +78,7 @@ export default function CaesPage() {
       </section>
       <div className={`${styles.container} ${styles.flexContainer}`}>
         <aside className={styles.filtrosAside}>
-          <div style={{ width: "100%", textAlign: "center", margin: " 0 0 " }}>
-            <a
-              href="/"
-              style={{
-                color: "#0099ff",
-                textDecoration: "underline",
-                fontWeight: "bold",
-                fontSize: "1rem",
-              }}
-            >
-              ← Home
-            </a>
-          </div>
-          <button
-            className={`${styles.filtroBtn} ${
-              filtro === "racoes" ? styles.filtroBtnAtivo : ""
-            }`}
-            onClick={() => setFiltro("racoes")}
-          >
-            Rações
-          </button>
-          <button
-            className={`${styles.filtroBtn} ${
-              filtro === "umida" ? styles.filtroBtnAtivo : ""
-            }`}
-            onClick={() => setFiltro("umida")}
-          >
-            Ração úmida
-          </button>
-          <button
-            className={`${styles.filtroBtn} ${
-              filtro === "snaks" ? styles.filtroBtnAtivo : ""
-            }`}
-            onClick={() => setFiltro("snaks")}
-          >
-            Snaks
-          </button>
-          <button
-            className={`${styles.filtroBtn} ${
-              filtro === "todas" ? styles.filtroBtnAtivo : ""
-            }`}
-            onClick={() => setFiltro("todas")}
-          >
-            Todas
-          </button>
+          <FiltroProdutos />
         </aside>
         <div className={styles.produtosArea}>
           <h2 className={styles.titulo}>Ração para Cães</h2>
@@ -171,4 +139,3 @@ export default function CaesPage() {
     </>
   );
 }
-// ...existing code...

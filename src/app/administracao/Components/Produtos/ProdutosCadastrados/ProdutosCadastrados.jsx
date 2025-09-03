@@ -186,6 +186,17 @@ export default function ProdutosCadastrados() {
                     />
                   </label>
                   <label className={styles.label}>
+                    Marca
+                    <input
+                      className={styles.input}
+                      name="marca"
+                      type="text"
+                      value={formProduto.marca || ""}
+                      onChange={handleChangeProduto}
+                      placeholder="Marca do produto"
+                    />
+                  </label>
+                  <label className={styles.label}>
                     SKU
                     <input
                       className={styles.input}

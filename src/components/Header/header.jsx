@@ -15,11 +15,35 @@ import styles from "./header.module.css";
 import Link from "next/link";
 
 export default function Header() {
+  // Estado para marcas do submenu
+  const [marcasCategoria, setMarcasCategoria] = useState([]);
+  const [categoriaHover, setCategoriaHover] = useState(null);
+
+  // Função para buscar marcas da categoria
+  const buscarMarcas = async (categoriaNome) => {
+    try {
+      const res = await fetch("https://apismilepet.vercel.app/api/produtos");
+      const data = await res.json();
+      if (res.ok && Array.isArray(data.data)) {
+        const marcas = Array.from(
+          new Set(
+            data.data
+              .filter((p) => p.categoria === categoriaNome && p.marca)
+              .map((p) => p.marca)
+          )
+        );
+        setMarcasCategoria(marcas);
+      } else {
+        setMarcasCategoria([]);
+      }
+    } catch {
+      setMarcasCategoria([]);
+    }
+  };
   const [menuOpen, setMenuOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
   const router = useRouter();
 
-  // Atualiza o número do carrinho ao montar e quando localStorage muda
   useEffect(() => {
     function updateCartCount() {
       const itens = localStorage.getItem("carrinho");
@@ -33,21 +57,33 @@ export default function Header() {
       } else {
         setCartCount(0);
       }
+      updateCartCount();
+      window.addEventListener("storage", updateCartCount);
+      const interval = setInterval(updateCartCount, 500);
+      return () => {
+        window.removeEventListener("storage", updateCartCount);
+        clearInterval(interval);
+      };
     }
-    updateCartCount();
-    window.addEventListener("storage", updateCartCount);
-    // Atualiza também quando a página do carrinho faz alterações
-    const interval = setInterval(updateCartCount, 500);
-    return () => {
-      window.removeEventListener("storage", updateCartCount);
-      clearInterval(interval);
-    };
   }, []);
+
+  const categoriasCachorro = [
+    { id: 2, nome: "Ração para Cachorro" },
+    { id: 5, nome: "Ração Úmida para Cães" },
+    { id: 6, nome: "Snacks para Cães" },
+    { id: 8, nome: "Higiene e Cuidados para Cães" },
+  ];
+  const categoriasGato = [
+    { id: 1, nome: "Ração para Gatos" },
+    { id: 4, nome: "Ração Úmida para Gatos" },
+    { id: 7, nome: "Snacks para Gatos" },
+    { id: 9, nome: "Higiene e Cuidados para Gatos" },
+  ];
+
   return (
     <header className={styles.headerV2}>
       <div className={styles.headerRow}>
         <div className={styles.logoArea}>
-          {/* Botão hambúrguer só aparece em telas pequenas via CSS */}
           <button
             className={styles.hamburger}
             aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}
@@ -78,9 +114,53 @@ export default function Header() {
                 Cachorros
               </Link>
               <div className={styles.menuDropdownContent}>
-                <Link href="/caes?categoria=racao-umida">Ração úmida</Link>
-                <Link href="/caes?categoria=snacks">Snacks</Link>
-                <Link href="/caes?categoria=higiene">Higiene</Link>
+                {categoriasCachorro.map((cat) => (
+                  <div
+                    key={cat.id}
+                    className={styles.menuCategoriaItem}
+                    onMouseEnter={() => {
+                      setCategoriaHover(cat.nome);
+                      buscarMarcas(cat.nome);
+                    }}
+                    onMouseLeave={() => {
+                      setTimeout(() => {
+                        setCategoriaHover((current) =>
+                          current === cat.nome ? null : current
+                        );
+                        setMarcasCategoria([]);
+                      }, 120);
+                    }}
+                    style={{ position: "relative" }}
+                  >
+                    <Link
+                      href={`/caes?categoria=${encodeURIComponent(cat.nome)}`}
+                    >
+                      {cat.nome}
+                    </Link>
+                    {categoriaHover === cat.nome &&
+                      marcasCategoria.length > 0 && (
+                        <div
+                          className={styles.menuSubmenuMarcas}
+                          onMouseEnter={() => setCategoriaHover(cat.nome)}
+                          onMouseLeave={() => {
+                            setCategoriaHover(null);
+                            setMarcasCategoria([]);
+                          }}
+                        >
+                          {marcasCategoria.map((marca, idx) => (
+                            <Link
+                              key={idx}
+                              href={`/caes?categoria=${encodeURIComponent(
+                                cat.nome
+                              )}&marca=${encodeURIComponent(marca)}`}
+                            >
+                              {marca}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                  </div>
+                ))}
               </div>
             </div>
             <div className={styles.menuDropdown}>
@@ -88,15 +168,58 @@ export default function Header() {
                 Gatos
               </Link>
               <div className={styles.menuDropdownContent}>
-                <Link href="/gatos?categoria=racao-umida">Ração úmida</Link>
-                <Link href="/gatos?categoria=snacks">Snacks</Link>
-                <Link href="/gatos?categoria=higiene">Higiene</Link>
+                {categoriasGato.map((cat) => (
+                  <div
+                    key={cat.id}
+                    className={styles.menuCategoriaItem}
+                    onMouseEnter={() => {
+                      setCategoriaHover(cat.nome);
+                      buscarMarcas(cat.nome);
+                    }}
+                    onMouseLeave={() => {
+                      setTimeout(() => {
+                        setCategoriaHover((current) =>
+                          current === cat.nome ? null : current
+                        );
+                        setMarcasCategoria([]);
+                      }, 120);
+                    }}
+                    style={{ position: "relative" }}
+                  >
+                    <Link
+                      href={`/gatos?categoria=${encodeURIComponent(cat.nome)}`}
+                    >
+                      {cat.nome}
+                    </Link>
+                    {categoriaHover === cat.nome &&
+                      marcasCategoria.length > 0 && (
+                        <div
+                          className={styles.menuSubmenuMarcas}
+                          onMouseEnter={() => setCategoriaHover(cat.nome)}
+                          onMouseLeave={() => {
+                            setCategoriaHover(null);
+                            setMarcasCategoria([]);
+                          }}
+                        >
+                          {marcasCategoria.map((marca, idx) => (
+                            <Link
+                              key={idx}
+                              href={`/gatos?categoria=${encodeURIComponent(
+                                cat.nome
+                              )}&marca=${encodeURIComponent(marca)}`}
+                            >
+                              {marca}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                  </div>
+                ))}
               </div>
             </div>
             <Link href="/promocoes">Promoções</Link>
             <Link href="/lojas">Compre no Atacado</Link>
           </nav>
-          {/* Menu mobile, aparece só se menuOpen=true */}
           {menuOpen && (
             <nav className={styles.mobileMenu}>
               <Link href="#assinaturas" onClick={() => setMenuOpen(false)}>

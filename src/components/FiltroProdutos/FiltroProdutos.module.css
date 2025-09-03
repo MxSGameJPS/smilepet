@@ -1,0 +1,58 @@
+.filtroContainer {
+  background: #faf8e3;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  padding: 24px 16px;
+  width: 260px;
+  margin-bottom: 32px;
+}
+.section {
+  margin-bottom: 18px;
+}
+.titulo {
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+  color: #2d3a2d;
+}
+.subtitulo {
+  font-size: 1rem;
+  margin-bottom: 6px;
+  color: #3a4d3a;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 2px;
+}
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 0.97rem;
+  color: #2d3a2d;
+}
+.checkboxLabel input[type="checkbox"] {
+  accent-color: #2e8b57;
+  margin-right: 8px;
+}
+.limparBtn {
+  background: none;
+  border: none;
+  color: #2e8b57;
+  font-size: 0.95rem;
+  cursor: pointer;
+  margin-bottom: 8px;
+  text-decoration: underline;
+}
+.filtrarBtn {
+  background: #2e8b57;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 18px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 10px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
+  transition: background 0.2s;
+}
+.filtrarBtn:hover {
+  background: #246b43;
+}
