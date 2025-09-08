@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState, use } from "react";
+import { getProdutosCache } from "../../../lib/produtosCache";
 import { useRouter } from "next/navigation";
 import Header from "../../../components/Header/header";
 import Footer from "../../../components/Footer/footer";
@@ -13,6 +14,7 @@ export default function Page({ params }) {
   const [loading, setLoading] = useState(true);
   const [variacoes, setVariacoes] = useState([]);
   const [variacaoSelecionada, setVariacaoSelecionada] = useState(null);
+  const [relacionados, setRelacionados] = useState([]);
 
   useEffect(() => {
     if (!id) return;
@@ -43,9 +45,22 @@ export default function Page({ params }) {
         } else {
           setVariacoes([]);
         }
+        // Buscar produtos relacionados (até R$60, exceto o atual)
+        const todosProdutos = await getProdutosCache();
+        const relacionadosFiltrados = todosProdutos
+          .filter(
+            (p) =>
+              p.id !== produtoApi.id &&
+              Number(p.preco) <= 60 &&
+              p.imagem_url &&
+              p.nome
+          )
+          .slice(0, 4);
+        setRelacionados(relacionadosFiltrados);
       } catch {
         setProduto(null);
         setVariacoes([]);
+        setRelacionados([]);
       } finally {
         setLoading(false);
       }
@@ -163,6 +178,44 @@ export default function Page({ params }) {
             </div>
           </div>
         </div>
+        {/* Produtos relacionados */}
+        {relacionados.length > 0 && (
+          <section className={styles.relacionadosSection}>
+            <h2 className={styles.relacionadosTitulo}>Produtos relacionados</h2>
+            <div className={styles.relacionadosLista}>
+              {relacionados.map((rel) => (
+                <div key={rel.id} className={styles.relacionadoCard}>
+                  <img
+                    src={rel.imagem_url || "/vercel.svg"}
+                    alt={rel.nome}
+                    className={styles.relacionadoImagem}
+                  />
+                  <span className={styles.relacionadoNome}>{rel.nome}</span>
+                  <span className={styles.relacionadoPreco}>
+                    R$ {Number(rel.preco).toFixed(2).replace(".", ",")}
+                  </span>
+                  <button
+                    className={`${styles.produtoBtn} ${styles.relacionadoBtn}`}
+                    onClick={() => {
+                      // Adiciona ao carrinho
+                      const carrinhoAtual = JSON.parse(
+                        localStorage.getItem("carrinho") || "[]"
+                      );
+                      carrinhoAtual.push({ ...rel, quantidade: 1 });
+                      localStorage.setItem(
+                        "carrinho",
+                        JSON.stringify(carrinhoAtual)
+                      );
+                      router.push("/carrinho");
+                    }}
+                  >
+                    Adicionar ao carrinho
+                  </button>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
       </main>
       <Footer />
     </div>
