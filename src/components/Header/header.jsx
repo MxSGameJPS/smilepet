@@ -95,7 +95,6 @@ export default function Header() {
           <video
             src="/videos/Vídeo_Animado_de_Cão_e_Gato.mp4"
             autoPlay
-            loop
             muted
             width={100}
             height={100}

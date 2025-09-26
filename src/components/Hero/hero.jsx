@@ -7,7 +7,6 @@ const banners = [
   { src: "/image/banner1.png", alt: "Banner 1" },
   { src: "/image/banner2.png", alt: "Banner 2" },
   { src: "/image/banner3.png", alt: "Banner 3" },
-  { src: "/image/banner4.png", alt: "Banner 4" },
 ];
 
 export default function Hero() {
@@ -15,7 +14,7 @@ export default function Hero() {
   React.useEffect(() => {
     const timer = setInterval(() => {
       setIndex((prev) => (prev + 1) % banners.length);
-    }, 3500);
+    }, 5500);
     return () => clearInterval(timer);
   }, []);
 

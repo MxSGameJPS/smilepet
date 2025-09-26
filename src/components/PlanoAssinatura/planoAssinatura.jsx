@@ -8,7 +8,7 @@ export default function PlanoAssinatura() {
       <Image
         src="/image/planoDeAssinatura.png"
         alt="Plano de Assinatura"
-        width={220}
+        width={420}
         height={220}
         className={styles.planoImg}
       />
