@@ -32,25 +32,36 @@ export default function SplashVideo({ duration = 7000 }) {
         overflow: "hidden",
       }}
     >
-      <video
-        src="/videos/Vídeo_Animado_de_Cão_e_Gato.mp4"
-        autoPlay
-        muted
+      {/* circular wrapper */}
+      <div
         style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform:
-            "translate(-50%, -50%) scale(" + (fade ? "0.7" : "1") + ")",
-          width: "100vw",
-          height: "100vh",
-          objectFit: "contain",
+          width: 620,
+          height: 620,
+          borderRadius: "50%",
+          overflow: "hidden",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
           background: "#fff",
+          boxShadow: "0 8px 40px rgba(0,0,0,0.25)",
+          transform: "scale(" + (fade ? "0.7" : "1") + ")",
           opacity: fade ? 0 : 1,
           transition:
             "opacity 0.8s ease, transform 0.8s cubic-bezier(.4,2,.3,1)",
         }}
-      />
+      >
+        <video
+          src="/videos/Vídeo_Animado_de_Cão_e_Gato.mp4"
+          autoPlay
+          muted
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            display: "block",
+          }}
+        />
+      </div>
     </div>
   );
 }
