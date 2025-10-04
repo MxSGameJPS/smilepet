@@ -30,7 +30,7 @@ export default function Promocoes({ loading, error }) {
       {loading && <p>Carregando promoções...</p>}
       {error && <p className={styles.error}>{error}</p>}
       <div className={styles.promocoesGrid}>
-        {produtos.slice(0, 6).map((prod, i) => {
+        {produtos.slice(0, 8).map((prod, i) => {
           const nome =
             prod.nome || prod.descricao || prod.codigo || prod.id || "Produto";
           let preco = prod.preco || prod.precoVenda || prod.valor || "-";

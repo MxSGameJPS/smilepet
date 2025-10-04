@@ -18,7 +18,7 @@ export default function Footer() {
         {/* Coluna 1: Logo, contato, redes sociais */}
         <div className={styles.footerCol}>
           <div className={styles.footerLogo}>
-            <Image src="/logo.jpeg" alt="SmilePet" width={80} height={80} />
+            <Image src="/Logo/logo.svg" alt="SmilePet" width={80} height={80} />
             <div>
               <div>contato@smilepet.com.br</div>
               <div>Telefone (21) 97666-3909</div>

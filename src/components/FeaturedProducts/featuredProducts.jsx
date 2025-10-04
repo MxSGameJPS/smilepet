@@ -25,7 +25,7 @@ export default function FeaturedProducts({ loading, error }) {
         <p className={styles.error}>Nenhum produto encontrado.</p>
       )}
       <div className={styles.productsGrid}>
-        {produtos.slice(0, 4).map((prod, i) => {
+        {produtos.slice(0, 8).map((prod, i) => {
           const nome =
             prod.nome || prod.descricao || prod.codigo || prod.id || "Produto";
           let preco = prod.preco || prod.precoVenda || prod.valor || "-";

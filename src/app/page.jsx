@@ -5,7 +5,7 @@ import FeaturedProducts from "../components/FeaturedProducts/featuredProducts";
 import PlanoAssinatura from "../components/PlanoAssinatura/planoAssinatura";
 import Promocoes from "../components/Promocoes/promocoes";
 import Footer from "../components/Footer/footer";
-import SplashVideo from "../components/SplashVideo";
+import Avaliacoes from "../components/Avaliacoes/avaliacoes";
 import { getProdutosCache } from "../lib/produtosCache";
 import { useEffect, useState } from "react";
 
@@ -13,7 +13,6 @@ export default function Home() {
   const [produtos, setProdutos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [showSplash, setShowSplash] = useState(true);
 
   useEffect(() => {
     async function fetchProdutos(force = false) {
@@ -27,14 +26,7 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    const timer = setTimeout(() => setShowSplash(false), 7000);
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (showSplash) {
-    return <SplashVideo duration={7000} />;
-  }
+  // Splash removido: agora a página carrega diretamente sem introdução
 
   return (
     <div>
@@ -43,6 +35,7 @@ export default function Home() {
       <FeaturedProducts produtos={produtos} loading={loading} error={error} />
       <PlanoAssinatura />
       <Promocoes produtos={produtos} loading={loading} error={error} />
+      <Avaliacoes />
       <Footer />
     </div>
   );

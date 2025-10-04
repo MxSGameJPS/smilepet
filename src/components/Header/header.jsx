@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import {
@@ -92,20 +92,8 @@ export default function Header() {
           >
             {menuOpen ? <FaTimes /> : <FaBars />}
           </button>
-          <video
-            src="/videos/Vídeo_Animado_de_Cão_e_Gato.mp4"
-            autoPlay
-            muted
-            width={100}
-            height={100}
-            className={styles.logoHeaderV2}
-            style={{
-              cursor: "pointer",
-              borderRadius: "50%",
-              objectFit: "cover",
-            }}
-            onClick={() => router.push("/")}
-          />
+          {/* Logo: primeiro exibe o vídeo e ao terminar mostra a imagem estática */}
+          <LogoSwitcher onClick={() => router.push("/")} />
         </div>
         <div className={styles.centerArea}>
           <input
@@ -289,5 +277,36 @@ export default function Header() {
         </div>
       </div>
     </header>
+  );
+}
+
+function LogoSwitcher({ onClick }) {
+  const [ended, setEnded] = useState(false);
+  const videoRef = useRef(null);
+
+  return (
+    <div style={{ display: "flex", alignItems: "center" }} onClick={onClick}>
+      {!ended ? (
+        <video
+          ref={videoRef}
+          src="/videos/Vídeo_Animado_de_Cão_e_Gato.mp4"
+          autoPlay
+          muted
+          playsInline
+          onEnded={() => setEnded(true)}
+          className={styles.logoHeaderV2}
+          style={{ cursor: "pointer", borderRadius: "50%", objectFit: "cover" }}
+        />
+      ) : (
+        <Image
+          src="/Logo/logo.svg"
+          alt="SmilePet"
+          width={130}
+          height={130}
+          className={styles.logoHeaderV2}
+          style={{ cursor: "pointer", borderRadius: "50%", objectFit: "cover" }}
+        />
+      )}
+    </div>
   );
 }
