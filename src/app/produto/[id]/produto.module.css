@@ -84,6 +84,7 @@
 .produtoFlex {
   display: flex;
   gap: 2rem;
+  align-items: flex-start;
   flex-wrap: wrap;
 }
 .produtoImagem {
@@ -94,10 +95,13 @@
   background: #fff;
   border-radius: 12px;
   border: 1px solid #eee;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
 }
 .produtoInfo {
-  flex: 1;
+  flex: 1 1 420px;
   color: #333;
+  display: flex;
+  flex-direction: column;
 }
 .produtoTitulo {
   font-size: 2rem;
@@ -125,11 +129,17 @@
   cursor: pointer;
   margin: 1rem 0;
 }
+.infoRow {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin: 12px 0;
+}
 .produtoDescricao {
-  margin: 1.5rem;
+  margin: 1rem 0;
 }
 .produtoDescricaoTexto {
-  margin: 1rem 0;
+  margin: 0.6rem 0;
   color: #555;
 }
 
@@ -139,4 +149,51 @@
 .produtoSubtitulo {
   font-size: 1.2rem;
   font-weight: 600;
+}
+
+/* Responsividade */
+@media (max-width: 1000px) {
+  .produtoFlex {
+    flex-direction: column;
+    align-items: center;
+  }
+  .produtoImagem {
+    width: 260px;
+    height: 260px;
+    margin-bottom: 12px;
+  }
+  .produtoInfo {
+    width: 100%;
+  }
+}
+
+/* Marca */
+.marca {
+  margin: 0.6rem 0;
+  font-size: 1rem;
+  color: #333;
+}
+.marca strong {
+  color: #1e4fa3;
+  margin-right: 6px;
+}
+
+/* Botão de Mais detalhes expansível */
+.detalhesBtn {
+  display: inline-block;
+  background: transparent;
+  color: #1e4fa3;
+  border: 2px solid #1e4fa3;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+}
+.detalhesBtn[aria-expanded="true"] {
+  background: #1e4fa3;
+  color: #fff;
+}
+.detalhesConteudo {
+  margin-top: 12px;
+  color: #444;
 }

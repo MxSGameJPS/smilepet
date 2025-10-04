@@ -4,6 +4,7 @@ import { getProdutosCache } from "../../../lib/produtosCache";
 import { useRouter } from "next/navigation";
 import Header from "../../../components/Header/header";
 import Footer from "../../../components/Footer/footer";
+import ChatFloat from "../../../components/ChatFloat/ChatFloat";
 import styles from "./produto.module.css";
 
 export default function Page({ params }) {
@@ -15,6 +16,7 @@ export default function Page({ params }) {
   const [variacoes, setVariacoes] = useState([]);
   const [variacaoSelecionada, setVariacaoSelecionada] = useState(null);
   const [relacionados, setRelacionados] = useState([]);
+  const [showDetalhes, setShowDetalhes] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -45,16 +47,22 @@ export default function Page({ params }) {
         } else {
           setVariacoes([]);
         }
-        // Buscar produtos relacionados (até R$60, exceto o atual)
+        // Buscar produtos relacionados: mesma categoria do produto atual (quando disponível), preço até R$60, exceto o atual
         const todosProdutos = await getProdutosCache();
+        const categoriaAtual = produtoApi.categoria || null;
         const relacionadosFiltrados = todosProdutos
-          .filter(
-            (p) =>
-              p.id !== produtoApi.id &&
-              Number(p.preco) <= 60 &&
-              p.imagem_url &&
-              p.nome
-          )
+          .filter((p) => {
+            if (p.id === produtoApi.id) return false;
+            if (!p.imagem_url || !p.nome) return false;
+            if (Number(p.preco) > 60) return false;
+            if (categoriaAtual) {
+              // compara categorias normalizadas
+              const a = (p.categoria || "").toString().trim().toLowerCase();
+              const b = (categoriaAtual || "").toString().trim().toLowerCase();
+              return a === b;
+            }
+            return true;
+          })
           .slice(0, 4);
         setRelacionados(relacionadosFiltrados);
       } catch {
@@ -102,14 +110,26 @@ export default function Page({ params }) {
             <h1 className={styles.produtoTitulo}>
               {variacaoSelecionada ? variacaoSelecionada.nome : produto.nome}
             </h1>
-            <p className={styles.produtoPreco}>
-              R${" "}
-              {variacaoSelecionada
-                ? Number(variacaoSelecionada.preco).toFixed(2).replace(".", ",")
-                : produto.preco
-                ? Number(produto.preco).toFixed(2).replace(".", ",")
-                : "-"}
-            </p>
+            <div className={styles.infoRow}>
+              <p className={styles.produtoPreco}>
+                R${" "}
+                {variacaoSelecionada
+                  ? Number(variacaoSelecionada.preco)
+                      .toFixed(2)
+                      .replace(".", ",")
+                  : produto.preco
+                  ? Number(produto.preco).toFixed(2).replace(".", ",")
+                  : "-"}
+              </p>
+              {produto.marca && (
+                <div className={styles.marca}>
+                  <strong>Marca:</strong> <span>{produto.marca}</span>
+                </div>
+              )}
+              {produto.promocao && (
+                <span className={styles.produtoPromocao}>Promoção!</span>
+              )}
+            </div>
             {variacoes.length > 0 && (
               <div className={styles.variacoesContainer}>
                 <span>Variações:</span>
@@ -144,9 +164,6 @@ export default function Page({ params }) {
                 ))}
               </div>
             )}
-            {produto.promocao && (
-              <span className={styles.produtoPromocao}>Promoção!</span>
-            )}
             <button className={styles.produtoBtn} onClick={handleAddCarrinho}>
               Adicionar ao carrinho
             </button>
@@ -161,21 +178,34 @@ export default function Page({ params }) {
                 className={styles.produtoDescricaoTexto}
               />
             </div>
-            {produto.descricao_completa && (
-              <div className={styles.produtoDescricao}>
-                <h2 className={styles.produtoSubtitulo}>Mais detalhes</h2>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: produto.descricao_completa,
-                  }}
-                  className={styles.produtoDescricaoTexto}
-                />
+            {/* Marca */}
+            {produto.marca && (
+              <div className={styles.marca}>
+                <strong>Marca:</strong> <span>{produto.marca}</span>
               </div>
             )}
-            <div className={styles.produtoSku}>
-              <h2 className={styles.produtoSubtitulo}>SKU</h2>
-              <p>{produto.sku}</p>
-            </div>
+
+            {/* Mais detalhes: botão expansível */}
+            {produto.descricao_completa && (
+              <div className={styles.produtoDescricao}>
+                <button
+                  type="button"
+                  className={styles.detalhesBtn}
+                  onClick={() => setShowDetalhes((v) => !v)}
+                  aria-expanded={showDetalhes}
+                >
+                  {showDetalhes ? "Ocultar detalhes" : "Mais detalhes"}
+                </button>
+                {showDetalhes && (
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: produto.descricao_completa,
+                    }}
+                    className={styles.detalhesConteudo}
+                  />
+                )}
+              </div>
+            )}
           </div>
         </div>
         {/* Produtos relacionados */}
@@ -218,6 +248,7 @@ export default function Page({ params }) {
         )}
       </main>
       <Footer />
+      <ChatFloat produto={produto} />
     </div>
   );
 }

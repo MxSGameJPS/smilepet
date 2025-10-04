@@ -1,0 +1,123 @@
+.fab {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #ff9800;
+  color: #fff;
+  border: none;
+  font-size: 1.6rem;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  z-index: 1200;
+}
+.chatBox {
+  position: fixed;
+  right: 24px;
+  bottom: 90px;
+  width: 320px;
+  max-height: 70vh;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.chatHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: linear-gradient(90deg, #1e4fa3, #2a6bd6);
+  color: #fff;
+}
+.chatSubtitle {
+  font-size: 0.75rem;
+  opacity: 0.9;
+}
+.chatHeaderBtns {
+  display: flex;
+  gap: 8px;
+}
+.iconBtn {
+  background: transparent;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+}
+.messages {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: auto;
+  background: #f6f9ff;
+}
+.msgBot {
+  align-self: flex-start;
+  background: #fff;
+  color: #222;
+  padding: 8px 10px;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+.msgUser {
+  align-self: flex-end;
+  background: #e6f0ff;
+  color: #022a6d;
+  padding: 8px 10px;
+  border-radius: 10px;
+}
+.qnaArea {
+  padding: 10px;
+  border-top: 1px solid #eee;
+  background: #fff;
+}
+.qnaTitle {
+  font-size: 0.85rem;
+  color: #333;
+  margin-bottom: 6px;
+}
+.qnaList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.qBtn {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #cfdff8;
+  background: #f0f6ff;
+  color: #1e4fa3;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  font-weight: 600;
+}
+
+.qBtn:hover {
+  background: #1e4fa3;
+  color: #fff;
+  border-color: #1e4fa3;
+}
+.qBtn:focus {
+  outline: 2px solid rgba(30, 79, 163, 0.15);
+  outline-offset: 2px;
+}
+
+@media (max-width: 480px) {
+  .chatBox {
+    right: 10px;
+    bottom: 80px;
+    width: 92vw;
+  }
+  .fab {
+    right: 10px;
+    bottom: 16px;
+  }
+}

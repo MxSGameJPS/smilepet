@@ -211,7 +211,7 @@ export default function Header() {
                 ))}
               </div>
             </div>
-            <Link href="/promocoes">Promoções</Link>
+            <Link href="/promocoes">Ofertas</Link>
             <Link href="/lojas">Compre no Atacado</Link>
           </nav>
           {menuOpen && (
@@ -226,7 +226,7 @@ export default function Header() {
                 Gatos
               </Link>
               <Link href="/promocoes" onClick={() => setMenuOpen(false)}>
-                Promoções
+                Ofertas
               </Link>
               <Link href="/lojas" onClick={() => setMenuOpen(false)}>
                 Nossas Lojas
